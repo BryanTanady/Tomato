@@ -18,10 +18,6 @@ const client: OAuth2Client = new OAuth2Client(webClientId);
 export class UserService {
 
     async createUser(id: string, name: string, firebaseToken: string): Promise<IUser|null> {
-        if(!id || !name || !firebaseToken){
-            console.warn("Invalid input")
-            return null
-        }
         try {
             const newUser: IUser = new UserModel({ 
                 _id: id, 
