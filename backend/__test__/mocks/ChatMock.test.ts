@@ -146,7 +146,6 @@ describe('Testing getChats', () => {
       member_2: "other"
     };
   
-    const main_user = "user123"
     await request(app)
       .post('/chats') 
       .send(newChat) 

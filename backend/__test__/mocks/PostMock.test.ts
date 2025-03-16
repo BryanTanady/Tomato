@@ -16,6 +16,8 @@ jest.mock('jsonwebtoken', () => ({
   ...jest.requireActual('jsonwebtoken'),
   verify: jest.fn().mockImplementation((token, secret, algorithm) =>
     {
+      console.log("SECRET", secret)
+      console.log("ALGORITHM"), algorithm
       if (token === "90909090") {
         return {id: "user123"}
       }
@@ -152,13 +154,13 @@ describe('Testing getUserPosts', () => {
       isPrivate: false,
     };
   
-    const createdPost = await request(app)
+    await request(app)
       .post('/posts')
       .send(newPost)
       .set('Authorization', 'Bearer 90909090')
       .expect(200);
       
-    const anotherPost = await request(app)
+    await request(app)
       .post('/posts')
       .send(newPost2)
       .set('Authorization', 'Bearer 90909090')
@@ -214,19 +216,19 @@ describe('Testing getUserPosts', () => {
       isPrivate: true,
     };
       
-    const createdPost = await request(app)
+    await request(app)
       .post('/posts')
       .send(newPost)
       .set('Authorization', 'Bearer 90909090')
       .expect(200);
           
-    const anotherPost = await request(app)
+    await request(app)
       .post('/posts')
       .send(newPost2)
       .set('Authorization', 'Bearer 90909090')
       .expect(200);
 
-    const otherPost = await request(app)
+    await request(app)
       .post('/posts')
       .send(newPost3)
       .set('Authorization', 'Bearer 90909080')

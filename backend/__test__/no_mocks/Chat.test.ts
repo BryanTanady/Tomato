@@ -180,7 +180,7 @@ describe("Testing createChat", () => {
       member_2: "user"
     };
 
-    const response = await request(app)
+    await request(app)
       .post('/chats') 
       .send(newChat) 
       .expect(401);

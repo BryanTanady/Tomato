@@ -6,7 +6,6 @@ import { PostController } from '../../controllers/PostController';
 import request from 'supertest';
 import { PostModel } from '../../model/PostModel';
 import { config } from 'dotenv';
-import { PostService } from '../../service/PostService';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 
 const {verifyToken} = require('../../middleware/verifyToken')
@@ -15,6 +14,8 @@ jest.mock('jsonwebtoken', () => ({
   ...jest.requireActual('jsonwebtoken'),
   verify: jest.fn().mockImplementation((token, secret, algorithm) =>
     {
+      console.log("SECRET", secret)
+      console.log("ALGORITHM", algorithm)
       if (token == "90909090") {
         return {id: "user123"}
       }
@@ -24,6 +25,7 @@ jest.mock('jsonwebtoken', () => ({
     }), 
   sign: jest.fn().mockReturnValue("token")
   }));
+
 
 let mongoServer = new MongoMemoryServer();
 

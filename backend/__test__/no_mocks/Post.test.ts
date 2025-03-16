@@ -222,22 +222,22 @@ describe('Testing getUserPosts', () => {
       isPrivate: true,
     };
 
-    const createdPost = await request(app)
+    await request(app)
       .post('/posts')
       .send(newPost)
       .expect(200);
     
-    const anotherPost = await request(app)
+    await request(app)
       .post('/posts')
       .send(newPost2)
       .expect(200);
 
-    const thirdpost = await request(app)
+    await request(app)
       .post('/posts-from-other')
       .send(newPost3)
       .expect(200);
 
-    const fourth = await request(app)
+    await request(app)
       .post('/posts-from-other')
       .send(newPost4)
       .expect(200);
@@ -296,22 +296,22 @@ describe('Testing getUserPosts', () => {
       isPrivate: true,
     };
 
-    const createdPost = await request(app)
+    await request(app)
       .post('/posts')
       .send(newPost)
       .expect(200);
     
-    const anotherPost = await request(app)
+    await request(app)
       .post('/posts')
       .send(newPost2)
       .expect(200);
 
-    const thirdpost = await request(app)
+    await request(app)
       .post('/posts-from-other')
       .send(newPost3)
       .expect(200);
 
-    const fourth = await request(app)
+    await request(app)
       .post('/posts-from-other')
       .send(newPost4)
       .expect(200);

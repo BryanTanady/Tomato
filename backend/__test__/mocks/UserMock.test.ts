@@ -128,7 +128,7 @@ describe('Testing handleGoogleSignIn', () => {
   it('should fail if process.env are not set', async () => {
     const old_processes = process.env;
     process.env = {}
-    const response1 = await request(app)
+    await request(app)
       .post(`/user/auth`)
       .send({
         googleToken: "google",
@@ -136,7 +136,7 @@ describe('Testing handleGoogleSignIn', () => {
       })
       .expect(400)
     process.env.WEB_CLIENT_ID = "string"
-    const response2 = await request(app)
+    await request(app)
       .post(`/user/auth`)
       .send({
         googleToken: "google",
