@@ -142,7 +142,7 @@ app.delete('/chat-no-middleware/:id/messages/:message_id', (req: Request, res: R
 
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
-  const uri = mongoServer.getUri();
+  const uri: string = mongoServer.getUri();
   await mongoose.connect(uri);
 });
 

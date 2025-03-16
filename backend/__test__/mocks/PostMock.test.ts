@@ -8,31 +8,24 @@ import { config } from 'dotenv';
 import { PostService } from '../../service/PostService';
 import { PostRoutes } from '../../routes/PostRoutes';
 import { validationResult } from 'express-validator';
-import { timingSafeEqual } from 'crypto';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
+import { timingSafeEqual } from 'crypto';
 
 const {verifyToken} = require('../../middleware/verifyToken')
 config();
 jest.mock('jsonwebtoken', () => ({
   ...jest.requireActual('jsonwebtoken'),
-  verify: jest.fn().mockImplementation((token, ..._) =>
+  verify: jest.fn().mockImplementation((token: string) =>
     {
-
-      const validToken = "90909090";
-      
-      // Convert both to Buffers
-      const tokenBuffer = Buffer.from(token);
-      const validTokenBuffer = Buffer.from(validToken);
-      
-      if (
-        tokenBuffer.length === validTokenBuffer.length &&
-        timingSafeEqual(tokenBuffer, validTokenBuffer)
-      ) {
-        return { id: "user123" };
-      } else {
-        throw new Error("Verify token error");
+      const expectedToken = Buffer.from("90909090");
+      const receivedToken = Buffer.from(token);
+      if (receivedToken.length === expectedToken.length && 
+          timingSafeEqual(receivedToken, expectedToken)) {
+          return { id: "user123" };
       }
-
+      else {
+        return {id: "other"}
+      }
     }),
   sign: jest.fn().mockReturnValue("token")
   }));
@@ -67,7 +60,7 @@ PostRoutes.forEach((route) => {
 
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
-  const uri = mongoServer.getUri();
+  const uri: string = mongoServer.getUri();
   await mongoose.connect(uri);
 });
 

@@ -62,7 +62,7 @@ UserRoutes.forEach((route) => {
 
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
-  const uri = mongoServer.getUri();
+  const uri: string = mongoServer.getUri();
   await mongoose.connect(uri);
 });
 

@@ -39,7 +39,7 @@ app.post('/user-faulty/auth', async (req: Request, res: Response, next: NextFunc
 
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
-  const uri = mongoServer.getUri();
+  const uri: string = mongoServer.getUri();
   await mongoose.connect(uri);
 });
 
