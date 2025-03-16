@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { NextFunction, Request, Response } from "express";
-import { AuthenticatedRequest } from '..';
+import { AuthenticatedRequest } from '../types/AuthenticatedRequest';
 
 
 const verifyToken = (req: Request, res: Response, next: NextFunction) => {
@@ -16,10 +16,6 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
         console.log("token doesn't exist")
 
         return res.status(401).json({ message: 'No token provided' });
-    }
-
-    if (!JWT_SECRET){
-        return res.status(500).json({message: "Internal Server Error"});
     }
 
     else{

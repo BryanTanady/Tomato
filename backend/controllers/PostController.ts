@@ -2,7 +2,7 @@ import { PostService } from "../service/PostService";
 import { Request, Response } from "express";
 import MissingCoordinateException from "../errors/customError";
 import { PostModel, Post } from "../model/PostModel";
-import { isAuthenticatedRequest } from "..";
+import { isAuthenticatedRequest } from "../types/AuthenticatedRequest";
 
 interface ImageData {
     fileData: Buffer;
@@ -57,11 +57,6 @@ export class PostController {
             if (error instanceof MissingCoordinateException) {
                 console.error("User Provided Invalid coordinate: ", error)
                 res.status(400).json({ message: "Incomplete coordinate" });
-            }
-            else {
-                console.error("Error: ", error);
-                res.status(500).json({ message: "Internal Server Error" });
-
             }
         }
     };

@@ -15,15 +15,17 @@ app.use(morgan('tiny'));
 
 const userController = new UserController();
 const userService = new UserService();
-app.post('/user/auth', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+
+app.post('/user/auth', (req: Request, res: Response, next: NextFunction): void => {
     try {
-        await userController.handleGoogleSignIn(req, res);
+        void userController.handleGoogleSignIn(req, res);
     } catch (error) {
         next(error);
     }}); 
-app.get('/user/:id', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+
+app.get('/user/:id', (req: Request, res: Response, next: NextFunction): void => {
   try {
-      await userController.getUser(req, res);
+      void userController.getUser(req, res);
   } catch (error) {
       next(error);
   }}); 
@@ -43,7 +45,7 @@ beforeEach(async () => {
   await UserModel.deleteMany({});
 });
 
-describe('Unmocked User APIs: Expected Behaviour', () => {
+describe('Testing getUser', () => {
   it('should get a user from id', async () => {
     const newUser = {
       _id: "1234",
@@ -51,7 +53,7 @@ describe('Unmocked User APIs: Expected Behaviour', () => {
       firebaseToken: "user12345"
     };
 
-    const user = await userService.createUser(newUser._id, newUser.username, newUser.firebaseToken)
+    await userService.createUser(newUser._id, newUser.username, newUser.firebaseToken)
     const response = await request(app)
         .get(`/user/${newUser._id}`)
         .expect(200)
@@ -61,9 +63,7 @@ describe('Unmocked User APIs: Expected Behaviour', () => {
     expect(response.body.username).toBe(newUser.username);
     expect(response.body.firebaseToken).toStrictEqual([newUser.firebaseToken]);
   });
-})
 
-describe('Unmocked User APIs: Erroneus Behaviour', () => {
   it('tries to get a non-existant user', async () => {
     const newUser = {
       _id: "1234",
@@ -71,14 +71,16 @@ describe('Unmocked User APIs: Erroneus Behaviour', () => {
       firebaseToken: "user12345"
     };
 
-    const user = await userService.createUser(newUser._id, newUser.username, newUser.firebaseToken)
+    await userService.createUser(newUser._id, newUser.username, newUser.firebaseToken)
     const response = await request(app)
         .get(`/user/4321`)
         .expect(200)
 
     expect(response.body).toBeNull()
   });
+})
 
+describe('Testing handleGoogleSignIn', () => {
   it('should fail to sign in a user with improper credentials', async () => {
     const response = await request(app)
         .post(`/user/auth`)

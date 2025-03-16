@@ -41,3 +41,5 @@ node_modules/
 serviceAccountKey.json
 
 yarn.lock
+
+backend/coverage/

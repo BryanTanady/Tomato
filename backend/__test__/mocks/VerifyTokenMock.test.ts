@@ -7,7 +7,7 @@ import request from 'supertest';
 import { PostModel } from '../../model/PostModel';
 import { config } from 'dotenv';
 import { PostService } from '../../service/PostService';
-import { AuthenticatedRequest } from '../..';
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 
 const {verifyToken} = require('../../middleware/verifyToken')
 config();
@@ -55,7 +55,7 @@ beforeEach(async () => {
   await PostModel.deleteMany({});
 });
 
-describe('Mocked Posts API: Erroneus Behaviour', () => {
+describe('Testing verifyToken', () => {
   beforeEach(() => {
     jest.restoreAllMocks();
     jest.clearAllMocks();

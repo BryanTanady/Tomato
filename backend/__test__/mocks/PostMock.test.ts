@@ -1,15 +1,14 @@
-import express, { NextFunction, Request, Response } from 'express';
+import express, { Response } from 'express';
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import morgan from 'morgan';
-import { PostController } from '../../controllers/PostController';
 import request from 'supertest';
 import { PostModel } from '../../model/PostModel';
 import { config } from 'dotenv';
 import { PostService } from '../../service/PostService';
-import { AuthenticatedRequest } from '../..';
 import { PostRoutes } from '../../routes/PostRoutes';
 import { validationResult } from 'express-validator';
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 
 const {verifyToken} = require('../../middleware/verifyToken')
 config();
@@ -17,7 +16,7 @@ jest.mock('jsonwebtoken', () => ({
   ...jest.requireActual('jsonwebtoken'),
   verify: jest.fn().mockImplementation((token, secret, algorithm) =>
     {
-      if (token == "90909090") {
+      if (token === "90909090") {
         return {id: "user123"}
       }
       else {
@@ -48,7 +47,7 @@ PostRoutes.forEach((route) => {
             try {
                 await route.action(req, res);
             } catch (err) {
-                console.log(err)
+                console.error('An error occurred:', err);
                 return res.sendStatus(500); // Don't expose internal server workings
             }
         },
@@ -67,15 +66,12 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
+  jest.restoreAllMocks();
+  jest.clearAllMocks();
   await PostModel.deleteMany({});
 });
 
-describe('Mocked Posts API: Erroneus Behaviour', () => {
-  beforeEach(() => {
-    jest.restoreAllMocks();
-    jest.clearAllMocks();
-  });
-
+describe('Testing createPost', () => {
   it('should fail to create a post if an error occurs', async () => {
     let spy = await jest.spyOn(PostModel.prototype, "save").mockImplementation(() => {
       throw new Error("Database Error 1")
@@ -97,11 +93,13 @@ describe('Mocked Posts API: Erroneus Behaviour', () => {
       .expect(200);
   
     expect(response.body).toBeNull()
-    await spy.mockClear()
+    spy.mockClear()
   });
+})
 
+describe('Testing getPostById', () => {
   it('should fail to get a post by ID if error occurs', async () => {
-    let spy = await jest.spyOn(PostModel, "findById").mockImplementation(() => {
+    let spy = jest.spyOn(PostModel, "findById").mockImplementation(() => {
       throw new Error("Database Error 2")
     })
     const newPost = {
@@ -127,7 +125,9 @@ describe('Mocked Posts API: Erroneus Behaviour', () => {
     expect(response.body.postData).toBeNull()
     spy.mockClear()
   });
+})
 
+describe('Testing getUserPosts', () => {
   it('should fail to get authenticated posts if error occurs', async () => {
     let spy = await jest.spyOn(PostModel, "find").mockImplementation(() => {
       throw new Error("Database Error 3")
@@ -177,90 +177,6 @@ describe('Mocked Posts API: Erroneus Behaviour', () => {
       .expect(200);
   
     expect(response.body).toBeNull()
-    await spy.mockClear()
-  });
-
-  it('should fail to get every post if error occurs', async () => {
-    let spy = await jest.spyOn(PostModel, "find").mockImplementation(() => {
-      throw new Error("Database Error 7")
-    })
-    const newPost = {
-      userId: 'user123',
-      latitude: 40.7128,
-      longitude: -74.0060,
-      images: ["string", "image/jpeg"],
-      date: new Date(),
-      note: 'Test post',
-      isPrivate: true,
-    };
-  
-    const newPost2 = {
-      userId: 'user123',
-      latitude: 40.7180,
-      longitude: -74.0060,
-      images: ["string", "image/jpeg"],
-      date: new Date(),
-      note: 'Test post',
-      isPrivate: false,
-    };
-  
-    const createdPost = await request(app)
-      .post('/posts')
-      .send(newPost)
-      .set('Authorization', 'Bearer 90909090')
-      .expect(200);
-      
-    const anotherPost = await request(app)
-      .post('/posts')
-      .send(newPost2)
-      .set('Authorization', 'Bearer 90909090')
-      .expect(200);
-
-    const response = await postService.getEveryPost();
-  
-    expect(response).toBeNull()
-    await spy.mockClear()
-  });
-
-  it('should fail to get post at location if error occurs', async () => {
-    let spy = await jest.spyOn(PostModel, "find").mockImplementation(() => {
-      throw new Error("Database Error 8")
-    })
-    const newPost = {
-      userId: 'user123',
-      latitude: 40.7128,
-      longitude: -74.0060,
-      images: ["string", "image/jpeg"],
-      date: new Date(),
-      note: 'Test post',
-      isPrivate: true,
-    };
-  
-    const newPost2 = {
-      userId: 'user123',
-      latitude: 40.7180,
-      longitude: -74.0060,
-      images: ["string", "image/jpeg"],
-      date: new Date(),
-      note: 'Test post',
-      isPrivate: false,
-    };
-  
-    const createdPost = await request(app)
-      .post('/posts')
-      .send(newPost)
-      .set('Authorization', 'Bearer 90909090')
-      .expect(200);
-      
-    const anotherPost = await request(app)
-      .post('/posts')
-      .send(newPost2)
-      .set('Authorization', 'Bearer 90909090')
-      .expect(200);
-
-    const response = await postService.getPostsAtLocation(40.7128, -74.0060, true);
-  
-    expect(response).toBeNull()
     await spy.mockClear()
   });
 
@@ -330,7 +246,97 @@ describe('Mocked Posts API: Erroneus Behaviour', () => {
     expect(response.body.length).toEqual(2);
     await spy.mockClear()
   });
+})
 
+describe('Testing getEveryPost', () => {
+  it('should fail to get every post if error occurs', async () => {
+    let spy = await jest.spyOn(PostModel, "find").mockImplementation(() => {
+      throw new Error("Database Error 7")
+    })
+    const newPost = {
+      userId: 'user123',
+      latitude: 40.7128,
+      longitude: -74.0060,
+      images: ["string", "image/jpeg"],
+      date: new Date(),
+      note: 'Test post',
+      isPrivate: true,
+    };
+  
+    const newPost2 = {
+      userId: 'user123',
+      latitude: 40.7180,
+      longitude: -74.0060,
+      images: ["string", "image/jpeg"],
+      date: new Date(),
+      note: 'Test post',
+      isPrivate: false,
+    };
+  
+    const createdPost = await request(app)
+      .post('/posts')
+      .send(newPost)
+      .set('Authorization', 'Bearer 90909090')
+      .expect(200);
+      
+    const anotherPost = await request(app)
+      .post('/posts')
+      .send(newPost2)
+      .set('Authorization', 'Bearer 90909090')
+      .expect(200);
+
+    const response = await postService.getEveryPost();
+  
+    expect(response).toBeNull()
+    await spy.mockClear()
+  });
+})
+
+describe('Testing getPostAtLocation', () => {
+  it('should fail to get post at location if error occurs', async () => {
+    let spy = await jest.spyOn(PostModel, "find").mockImplementation(() => {
+      throw new Error("Database Error 8")
+    })
+    const newPost = {
+      userId: 'user123',
+      latitude: 40.7128,
+      longitude: -74.0060,
+      images: ["string", "image/jpeg"],
+      date: new Date(),
+      note: 'Test post',
+      isPrivate: true,
+    };
+  
+    const newPost2 = {
+      userId: 'user123',
+      latitude: 40.7180,
+      longitude: -74.0060,
+      images: ["string", "image/jpeg"],
+      date: new Date(),
+      note: 'Test post',
+      isPrivate: false,
+    };
+  
+    const createdPost = await request(app)
+      .post('/posts')
+      .send(newPost)
+      .set('Authorization', 'Bearer 90909090')
+      .expect(200);
+      
+    const anotherPost = await request(app)
+      .post('/posts')
+      .send(newPost2)
+      .set('Authorization', 'Bearer 90909090')
+      .expect(200);
+
+    const response = await postService.getPostsAtLocation(40.7128, -74.0060, true);
+  
+    expect(response).toBeNull()
+    await spy.mockClear()
+  });
+})
+
+describe('Testing getPublicPosts', () => {
   it('should fail to get public posts in range if error occurs', async () => {
     let spy = await jest.spyOn(PostModel, "find").mockImplementation(() => {
       throw new Error("Database Error 4")
@@ -380,7 +386,9 @@ describe('Mocked Posts API: Erroneus Behaviour', () => {
     expect(response.body).toBeNull()
     await spy.mockClear()
   });
+})
 
+describe('Testing updatePost', () => {
   it('should fail to update a post if error occurs', async () => {
     let spy = await jest.spyOn(PostModel, "findByIdAndUpdate").mockImplementation(() => {
       throw new Error("Database Error 5")
@@ -412,6 +420,9 @@ describe('Mocked Posts API: Erroneus Behaviour', () => {
     expect(response.body).toBeNull();
     await spy.mockClear()
   });
+})
+
+describe('Testing deletePost', () => {
   it('should fail to delete a post if error occurs', async () => {
     let spy = await jest.spyOn(PostModel, "findOneAndDelete").mockImplementation(() => {
       throw new Error("Database Error 6")

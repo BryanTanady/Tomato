@@ -70,31 +70,26 @@ export class PostService {
         end_lat?: number, 
         start_long?: number, 
         end_long?: number, 
-    ): Promise<Post[] | null> {
+    ): Promise<Post[]> {
         
         const coordinates = [start_lat, end_lat, start_long, end_long];
         if(isMissingCoordinate(coordinates)){
             throw new MissingCoordinateException("Incomplete Coordinate Information");
         }
             
+        const query: CoordinateQuery = {};
 
-        try {
-            const query: CoordinateQuery = {};
-    
-            // Check for start_long and end_long separately
-            if (start_long !== undefined) {
-                query.longitude = { $gte: start_long };  // Longitude greater than or equal to start_long
-            }
-            if (end_long !== undefined) {
-                query.longitude = { ...query.longitude, $lte: end_long };  // Longitude less than or equal to end_long
-            }
-    
-            // Return the posts based on the constructed 
-            return await PostModel.find(query).exec();
-        } catch (error) {
-            console.error("Error getting posts", error);
-            return null;
+        // Check for start_long and end_long separately
+        if (start_long !== undefined) {
+            query.longitude = { $gte: start_long };  // Longitude greater than or equal to start_long
         }
+        if (end_long !== undefined) {
+            query.longitude = { ...query.longitude, $lte: end_long };  // Longitude less than or equal to end_long
+        }
+
+        // Return the posts based on the constructed 
+        return await PostModel.find(query).exec();
+    
     }    
 
     /**
@@ -106,18 +101,20 @@ export class PostService {
         start_long?: number, 
         end_long?: number, 
     ): Promise<Post[] | null> {
+        
         try{
-            const posts = await this.getPosts(start_lat, end_lat, start_long, end_long);
+            const posts = await this.getPosts(start_lat, end_lat, start_long, end_long)
 
             //filter to remove all private posts
-            const publicPosts = posts?.filter(post => !post.isPrivate);
-            if (publicPosts === undefined) {
+            const publicPosts = posts.filter(post => post.isPrivate === false)
+            return publicPosts
+        } catch(err){
+            if (err instanceof MissingCoordinateException) {
+                throw new MissingCoordinateException("Incomplete Coordinate Information");
+            } else {
+                console.log("Error getting posts", err);
                 return null;
             }
-            return publicPosts;
-        } catch(err){
-            console.error("Error getting posts", err);
-            return null;
         }
     }
 
@@ -138,29 +135,32 @@ export class PostService {
         end_long?: number, 
     ): Promise<Post[] | null> {
         
-        const userPost = await PostModel.find({userId}).exec();
 
         try{
             const userPost = await PostModel.find({userId: userId})
             if(userPostOnly){
-                return userPost;
+                return userPost
             }
             else{
                 const publicPost = await this.getPublicPost(start_lat, end_lat, start_long, end_long) ?? [];
 
-                const combinedPosts = [...userPost, ...publicPost];
+                const combinedPosts = [...userPost, ...publicPost]
 
                 // Use a Set to remove duplicates based on a unique identifier (e.g., post ID)
-                const uniquePosts = Array.from(new Set(combinedPosts.map(post => post?._id.toString()))) // Use post._id to uniquely identify posts
-                .map(id => combinedPosts.find(post => post?._id.toString() === id )) as Post[];
-
-                return uniquePosts;
+                const uniquePosts = Array.from(new Set(combinedPosts.map(post => post._id.toString()))) // Use post._id to uniquely identify posts
+                .map(id => combinedPosts.find(post => post._id.toString() === id )) as Post[];
+                return uniquePosts.filter(post => post != null);
             }
         }
         catch (error) {
-            console.error("Error getting posts", error);
-            return null;
+            if (error instanceof MissingCoordinateException) {
+                throw new MissingCoordinateException("Incomplete Coordinate Information");
+            } else {
+                console.log("Error getting posts", error);
+                return null;
+            }
         }
+   
     }
 
     async getEveryPost(): Promise<Post[] | null> {

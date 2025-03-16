@@ -2,19 +2,6 @@ import {sign} from "jsonwebtoken";
 import { UserModel, IUser } from "../model/UserModel"
 import { OAuth2Client, TokenPayload } from "google-auth-library";
 
-
-if (!process.env.WEB_CLIENT_ID) {
-    throw new Error("WEB_CLIENT_ID is not defined in environment variables");
-  }
-if (!process.env.JWT_SECRET) {
-    throw new Error("JWT_SECRET is not defined in environment variables");
-}
-const webClientId: string = process.env.WEB_CLIENT_ID
-const jwtSecret: string = process.env.JWT_SECRET
-
-const client: OAuth2Client = new OAuth2Client(webClientId);
-
-
 export class UserService {
 
     async createUser(id: string, name: string, firebaseToken: string): Promise<IUser|null> {
@@ -29,8 +16,6 @@ export class UserService {
         } catch (error: unknown) {
             if (error instanceof Error) {
               console.error("Error creating user:", error.message);
-            } else {
-              console.error("Error creating user:", error);
             }
             return null;
           }
@@ -52,14 +37,24 @@ export class UserService {
 
     async signInWithGoogle(googleToken: string, firebaseToken: string){
         // Verify Google token
+        if (!process.env.WEB_CLIENT_ID) {
+            throw new Error("WEB_CLIENT_ID is not defined in environment variables");
+          }
+        if (!process.env.JWT_SECRET) {
+            throw new Error("JWT_SECRET is not defined in environment variables");
+        }
+        const webClientId: string = process.env.WEB_CLIENT_ID
+        const jwtSecret: string = process.env.JWT_SECRET
+        
+        const client: OAuth2Client = new OAuth2Client(webClientId);
+        
         const ticket = await client.verifyIdToken({
             idToken: googleToken.replace('Bearer ', ''),
             audience: process.env.GOOGLE_CLIENT_ID,
         });
 
-
         const payload = ticket.getPayload() as TokenPayload;
-        if (payload === undefined || !payload?.sub || !payload.name) {
+        if (payload === undefined || !payload.sub || !payload.name) {
             throw new Error("Invalid Google Token");
         }
 
@@ -80,7 +75,11 @@ export class UserService {
             expiresIn: "999d",
             algorithm: "HS256"
         });
-        const userID = user?._id
+
+        let userID = null
+        if (user) {
+            userID = user._id
+        }
 
         return { token: jwtToken, userID };
     }

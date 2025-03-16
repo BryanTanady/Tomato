@@ -6,21 +6,21 @@ import request from 'supertest';
 import { PostModel } from '../../model/PostModel';
 import { RecommendationController } from '../../controllers/RecommendationController';
 import { PostController } from '../../controllers/PostController';
-import { AuthenticatedRequest } from '../..';
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { RecommendationRoutes } from '../../routes/RecommendationRoutes';
 import { validationResult } from 'express-validator';
 import 'dotenv/config';
 
 let mongoServer = new MongoMemoryServer();
-const app = express();
+const app: express.Application = express();
 app.use(express.json());  
 app.use(morgan('tiny'));
 
 
 const recommendationController = new RecommendationController();
 const postController = new PostController();
-const middleware = (req: Request, res: Request, next: NextFunction) => {
-  (req as any).user = { id: 'user123' }; 
+const middleware = (req: AuthenticatedRequest, res: Request, next: NextFunction) => {
+  req.user = { id: 'user123' }; 
   next();
 }
 RecommendationRoutes.forEach((route) => {
@@ -39,7 +39,7 @@ RecommendationRoutes.forEach((route) => {
           try {
               await route.action(req, res);
           } catch (err) {
-              console.log(err)
+              console.error('Error:', err)
               return res.sendStatus(500); // Don't expose internal server workings
           }
       },
@@ -53,7 +53,7 @@ app.get('/recommendations-no-middlewware', async (req, res, next) : Promise<void
     }
   });  
 app.post('/posts', (req, res, next) => {
-    (req as any).user = { id: 'user123' }; 
+    (req as AuthenticatedRequest).user = { id: 'user123' }; 
     next();
   }, async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
@@ -63,7 +63,7 @@ app.post('/posts', (req, res, next) => {
     }});  
 
 app.post('/posts-from-other', (req, res, next) => {
-    (req as any).user = { id: 'other' }; 
+    (req as AuthenticatedRequest).user = { id: 'other' }; 
     next();
   }, async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
@@ -73,7 +73,7 @@ app.post('/posts-from-other', (req, res, next) => {
     }});  
 
 app.post('/posts-from-someone', (req, res, next) => {
-    (req as any).user = { id: 'someone' }; 
+    (req as AuthenticatedRequest).user = { id: 'someone' }; 
     next();
   }, async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
@@ -83,7 +83,7 @@ app.post('/posts-from-someone', (req, res, next) => {
     }}); 
 
 app.post('/posts-from-else', (req, res, next) => {
-    (req as any).user = { id: 'else' }; 
+    (req as AuthenticatedRequest).user = { id: 'else' }; 
     next();
   }, async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
@@ -93,7 +93,7 @@ app.post('/posts-from-else', (req, res, next) => {
     }}); 
 
 app.post('/posts-from-fourth', (req, res, next) => {
-    (req as any).user = { id: 'fourth' }; 
+    (req as AuthenticatedRequest).user = { id: 'fourth' }; 
     next();
   }, async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
@@ -118,7 +118,7 @@ beforeEach(async () => {
   await PostModel.deleteMany({});
 });
 
-describe('Unmocked Recommendations API: Expected Behaviour', () => {
+describe('Testing getRecommendations', () => {
   it('should get recommendations, public and private posts', async () => {
     const newPost1 = {
       userId: 'user123',
@@ -445,28 +445,28 @@ describe('Unmocked Recommendations API: Expected Behaviour', () => {
     const else_ = [newPost19, newPost20, newPost21, newPost22, newPost23, newPost24]
     const fourth = [newPost25, newPost26, newPost27, newPost28, newPost29, newPost30]
 
-    const main_user = "user123"
+    // const main_user = "user123"
 
     for (let i = 0; i < 6; i++) {
       await request(app)
         .post('/posts') 
-        .send(user123[i]) 
+        .send(user123[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-other') 
-        .send(other[i]) 
+        .send(other[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-someone') 
-        .send(someone[i]) 
+        .send(someone[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-else') 
-        .send(else_[i]) 
+        .send(else_[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-fourth') 
-        .send(fourth[i])
+        .send(fourth[Number(i)])
         .expect(200);
     }
 
@@ -872,28 +872,28 @@ describe('Unmocked Recommendations API: Expected Behaviour', () => {
     const else_ = [newPost19, newPost20, newPost21, newPost22, newPost23, newPost24]
     const fourth = [newPost25, newPost26, newPost27, newPost28, newPost29, newPost30]
 
-    const main_user = "user123"
+    // const main_user = "user123"
 
     for (let i = 0; i < 6; i++) {
       await request(app)
         .post('/posts') 
-        .send(user123[i]) 
+        .send(user123[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-other') 
-        .send(other[i]) 
+        .send(other[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-someone') 
-        .send(someone[i]) 
+        .send(someone[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-else') 
-        .send(else_[i]) 
+        .send(else_[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-fourth') 
-        .send(fourth[i])
+        .send(fourth[Number(i)])
         .expect(200);
     }
 
@@ -1252,23 +1252,23 @@ describe('Unmocked Recommendations API: Expected Behaviour', () => {
     for (let i = 0; i < 6; i++) {
       await request(app)
         .post('/posts') 
-        .send(user123[i]) 
+        .send(user123[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-other') 
-        .send(other[i]) 
+        .send(other[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-someone') 
-        .send(someone[i]) 
+        .send(someone[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-else') 
-        .send(else_[i]) 
+        .send(else_[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-fourth') 
-        .send(fourth[i])
+        .send(fourth[Number(i)])
         .expect(200);
     }
 
@@ -1631,23 +1631,23 @@ describe('Unmocked Recommendations API: Expected Behaviour', () => {
     for (let i = 0; i < 6; i++) {
       await request(app)
         .post('/posts') 
-        .send(user123[i]) 
+        .send(user123[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-other') 
-        .send(other[i]) 
+        .send(other[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-someone') 
-        .send(someone[i]) 
+        .send(someone[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-else') 
-        .send(else_[i]) 
+        .send(else_[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-fourth') 
-        .send(fourth[i])
+        .send(fourth[Number(i)])
         .expect(200);
     }
 
@@ -1992,23 +1992,23 @@ describe('Unmocked Recommendations API: Expected Behaviour', () => {
     for (let i = 0; i < 6; i++) {
       await request(app)
         .post('/posts') 
-        .send(user123[i]) 
+        .send(user123[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-other') 
-        .send(other[i]) 
+        .send(other[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-someone') 
-        .send(someone[i]) 
+        .send(someone[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-else') 
-        .send(else_[i]) 
+        .send(else_[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-fourth') 
-        .send(fourth[i])
+        .send(fourth[Number(i)])
         .expect(200);
     }
 
@@ -2359,19 +2359,19 @@ describe('Unmocked Recommendations API: Expected Behaviour', () => {
     for (let i = 0; i < 6; i++) {
       await request(app)
         .post('/posts-from-other') 
-        .send(other[i]) 
+        .send(other[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-someone') 
-        .send(someone[i]) 
+        .send(someone[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-else') 
-        .send(else_[i]) 
+        .send(else_[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-fourth') 
-        .send(fourth[i])
+        .send(fourth[Number(i)])
         .expect(200);
     }
 
@@ -2717,24 +2717,24 @@ describe('Unmocked Recommendations API: Expected Behaviour', () => {
     const else_ = [newPost19, newPost20, newPost21, newPost22, newPost23, newPost24]
     const fourth = [newPost25, newPost26, newPost27, newPost28, newPost29, newPost30]
 
-    const main_user = "user123"
+    // const main_user = "user123"
 
     for (let i = 0; i < 6; i++) {
       await request(app)
         .post('/posts-from-other') 
-        .send(other[i]) 
+        .send(other[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-someone') 
-        .send(someone[i]) 
+        .send(someone[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-else') 
-        .send(else_[i]) 
+        .send(else_[Number(i)]) 
         .expect(200);
       await request(app)
         .post('/posts-from-fourth') 
-        .send(fourth[i])
+        .send(fourth[Number(i)])
         .expect(200);
     }
 
@@ -2818,16 +2818,14 @@ describe('Unmocked Recommendations API: Expected Behaviour', () => {
     expect(response.body.posts[7].latitude).toEqual(response.body.posts[8].latitude);
   });
 
-  it('should return null if no posts', async () => {
+  it('should return empty list if no posts', async () => {
     const response = await request(app)
       .get("/recommendations")
       .expect(200)
 
-    expect(response.body).toBeNull()
+    expect(response.body.posts).toEqual([])
   });
-})
 
-describe('Unmocked Recommendations API: Erroneus Behaviour', () => {
   it('should return an error if the user is not provided', async () => {
     const newPost1 = {
       userId: 'someone',

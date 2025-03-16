@@ -1,13 +1,11 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import morgan from 'morgan';
 import request from 'supertest';
-import { UserController } from '../../controllers/UserController';
 import { UserModel } from '../../model/UserModel';
 import { UserService } from '../../service/UserService';
 import { UserRoutes } from '../../routes/UserRoutes';
-import jwt from 'jsonwebtoken';
 import verifyToken from '../../middleware/verifyToken';
 import { validationResult } from 'express-validator';
 
@@ -35,7 +33,7 @@ const app = express();
 app.use(express.json());  
 app.use(morgan('tiny')); 
 
-const userController = new UserController();
+// const userController = new UserController();
 const userService = new UserService();
 UserRoutes.forEach((route) => {
   const middlewares = (route as any).protected ? [verifyToken] : [];
@@ -53,7 +51,7 @@ UserRoutes.forEach((route) => {
           try {
               await route.action(req, res);
           } catch (err) {
-              console.log(err)
+              console.error('Error occurred:', err);
               return res.sendStatus(500); // Don't expose internal server workings
           }
       },
@@ -78,7 +76,7 @@ beforeEach(async () => {
   await UserModel.deleteMany({});
 });
 
-describe('Mocked User APIs: Expected Behaviour', () => {
+describe('Testing handleGoogleSignIn', () => {
   it('should sign in to google with existant user', async () => {
     const newUser = {
       _id: "1234",
@@ -126,9 +124,30 @@ describe('Mocked User APIs: Expected Behaviour', () => {
     expect(response1.body.username).toBe(newUser.username); 
     expect(response1.body.firebaseToken).toStrictEqual([newUser.firebaseToken]); 
   });
+
+  it('should fail if process.env are not set', async () => {
+    const old_processes = process.env;
+    process.env = {}
+    const response1 = await request(app)
+      .post(`/user/auth`)
+      .send({
+        googleToken: "google",
+        firebaseToken: "firebase"
+      })
+      .expect(400)
+    process.env.WEB_CLIENT_ID = "string"
+    const response2 = await request(app)
+      .post(`/user/auth`)
+      .send({
+        googleToken: "google",
+        firebaseToken: "firebase"
+      })
+      .expect(400)
+    process.env = old_processes;
+  })
 })
 
-describe('Mocked User APIs: Erroneus Behaviour', () => {
+describe('Testing creatsUser', () => {
   it('should fail to create a user if an error occurs', async () => {
     let spy = jest.spyOn(UserModel.prototype, "save").mockImplementation(() => {
       throw new Error("database issue")
@@ -142,7 +161,9 @@ describe('Mocked User APIs: Erroneus Behaviour', () => {
     expect(user).toBeNull();
     spy.mockClear()
   })
+});
 
+describe('Testing getUser', () => {
   it('should fail to get a user if an error occurs', async () => {
     let spy = jest.spyOn(UserModel, "findById").mockImplementation(() => {
       throw new Error("Database issue");

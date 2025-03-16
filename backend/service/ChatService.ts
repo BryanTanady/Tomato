@@ -16,8 +16,6 @@ export class ChatService {
     } catch (err: unknown) {
       if (err instanceof Error) {
         console.error("Error creating chat: " + err.message);
-      } else {
-        console.error("Error creating chat", err);
       }
       return null;
     }
@@ -29,8 +27,6 @@ export class ChatService {
     } catch (err: unknown) {
       if (err instanceof Error) {
         console.error("Error getting chat messages: " + err.message);
-      } else {
-        console.error("Error getting chat messages", err);
       }
       return null;
     }
@@ -38,12 +34,10 @@ export class ChatService {
 
   async getChat(id: string): Promise<IChat | null> {
     try {
-      return await ChatModel.findOne({ _id: id }).exec();
+      return await ChatModel.findById(id).exec();
     } catch (err: unknown) {
       if (err instanceof Error) {
         console.error("Error getting chat: " + err.message);
-      } else {
-        console.error("Error getting chat", err);
       }
       return null;
     }
@@ -55,8 +49,6 @@ export class ChatService {
     } catch (err: unknown) {
       if (err instanceof Error) {
         console.error("Error getting chats: " + err.message);
-      } else {
-        console.error("Error getting chats", err);
       }
       return null;
     }
@@ -73,9 +65,7 @@ export class ChatService {
     } catch (err: unknown) {
       if (err instanceof Error) {
         console.error("Error deleting chat: " + err.message);
-      } else {
-        console.error("Error deleting chat", err);
-      }
+      } 
       return null;
     }
   }
@@ -91,9 +81,7 @@ export class ChatService {
     } catch (err: unknown) {
       if (err instanceof Error) {
         console.error("Error adding message: " + err.message);
-      } else {
-        console.error("Error adding message", err);
-      }
+      } 
       return null;
     }
   }
@@ -108,9 +96,7 @@ export class ChatService {
     } catch (err: unknown) {
       if (err instanceof Error) {
         console.error("Error deleting message: " + err.message);
-      } else {
-        console.error("Error deleting message", err);
-      }
+      } 
       return null;
     }
   }

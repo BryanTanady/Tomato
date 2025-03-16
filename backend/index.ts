@@ -8,6 +8,7 @@ import { ChatRoutes } from './routes/ChatRoutes';
 import { config } from 'dotenv';
 import startWSS from './wss';
 import { RecommendationRoutes } from './routes/RecommendationRoutes';
+import { AuthenticatedRequest } from './types/AuthenticatedRequest';
 config();
 
 const {verifyToken} = require('./middleware/verifyToken')
@@ -15,19 +16,6 @@ const app = express();
 
 app.use(express.json({limit: '100mb'}));
 app.use(morgan('tiny'))
-
-export interface AuthenticatedRequest extends Request {
-    user: { id: string }; 
-    params: { 
-        id: string 
-        message_id: string
-    }; 
-}
-
-export function isAuthenticatedRequest(req: Request): req is AuthenticatedRequest {
-    return "user" in req;
-}
-
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello World');
