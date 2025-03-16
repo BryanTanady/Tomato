@@ -8,21 +8,31 @@ import { config } from 'dotenv';
 import { PostService } from '../../service/PostService';
 import { PostRoutes } from '../../routes/PostRoutes';
 import { validationResult } from 'express-validator';
+import { timingSafeEqual } from 'crypto';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 
 const {verifyToken} = require('../../middleware/verifyToken')
 config();
 jest.mock('jsonwebtoken', () => ({
   ...jest.requireActual('jsonwebtoken'),
-  verify: jest.fn().mockImplementation((token, _secret, _algorithm) =>
+  verify: jest.fn().mockImplementation((token, ..._) =>
     {
 
-      if ("90909090" === token) {
-        return {id: "user123"}
+      const validToken = "90909090";
+      
+      // Convert both to Buffers
+      const tokenBuffer = Buffer.from(token);
+      const validTokenBuffer = Buffer.from(validToken);
+      
+      if (
+        tokenBuffer.length === validTokenBuffer.length &&
+        timingSafeEqual(tokenBuffer, validTokenBuffer)
+      ) {
+        return { id: "user123" };
+      } else {
+        throw new Error("Verify token error");
       }
-      else {
-        return {id: "other"}
-      }
+
     }),
   sign: jest.fn().mockReturnValue("token")
   }));
