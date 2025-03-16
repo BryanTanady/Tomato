@@ -12,11 +12,9 @@ const {verifyToken} = require('../../middleware/verifyToken')
 config();
 jest.mock('jsonwebtoken', () => ({
   ...jest.requireActual('jsonwebtoken'),
-  verify: jest.fn().mockImplementation((token, secret, algorithm) =>
+  verify: jest.fn().mockImplementation((token, _secret, _algorithm) =>
     {
-      console.log("SECRET", secret)
-      console.log("ALGORITHM", algorithm)
-      if (token == "90909090") {
+      if ("90909090" === token) {
         return {id: "user123"}
       }
       else {
