@@ -185,13 +185,9 @@ class UploadPostActivity : AppCompatActivity() {
             val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
             val date: Date? = dateFormatter.parse(postDate)
 
-            val body = JSONObject()
-                .put("latitude", postLatitude)
-                .put("longitude", postLongitude)
-                .put("images", imageArray)
-                .put("date", date)
-                .put("note", note)
-                .put("isPrivate", postIsPrivate)
+            val body = JSONObject().put("latitude", postLatitude).put("longitude", postLongitude)
+                .put("images", imageArray).put("date", date)
+                .put("note", note).put("isPrivate", postIsPrivate)
                 .toString()
 
             lifecycleScope.launch {
