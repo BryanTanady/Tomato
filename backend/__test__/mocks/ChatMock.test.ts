@@ -10,7 +10,7 @@ import { ChatRoutes } from '../../routes/ChatRoutes';
 import { validationResult } from 'express-validator';
 import { ChatService } from '../../service/ChatService';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
-
+import jwt from 'jsonwebtoken';
 import { verifyToken } from '../../middleware/verifyToken'
 
 let mongoServer = new MongoMemoryServer();
@@ -22,8 +22,8 @@ app.use(morgan('tiny'));
 
 jest.mock('jsonwebtoken', () => ({
   ...jest.requireActual('jsonwebtoken'), 
-  verify: jest.fn().mockReturnValue({id: "user123"}), 
-  sign: jest.fn().mockReturnValue("token")
+  verify: jest.fn().mockReturnValue({ id: "user123" }) as typeof jwt.verify,
+  sign: jest.fn().mockReturnValue("token") as typeof jwt.sign,
   }));
 
 const chatService = new ChatService();
