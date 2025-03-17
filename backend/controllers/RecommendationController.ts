@@ -94,11 +94,18 @@ export class RecommendationController {
         res.json({posts: best_posts})
     }
 
-    mode(arr : string[]) : any {
-        return arr.sort((a,b) =>
+    mode(arr : string[]) : string {
+        let result: string | undefined = arr.sort((a,b) =>
               arr.filter(v => v===a).length
             - arr.filter(v => v===b).length
         ).pop();
+        
+        if (result) {
+            return result;
+        }
+        else{
+            return ""
+        }
     }
 
     deleteOccurences(a : string[], e : string) : string[] | -1 {

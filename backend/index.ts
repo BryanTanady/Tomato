@@ -27,7 +27,7 @@ const allRoutes = [...PostRoutes, ...UserRoutes, ...ChatRoutes, ...Recommendatio
 allRoutes.forEach((route) => {
     const middlewares = route.protected ? [verifyToken] : []; // Add verifyToken only if protected
 
-    (app as any)[route.method](
+    (app)[route.method](
         route.route,
         ...middlewares,
         route.validation,

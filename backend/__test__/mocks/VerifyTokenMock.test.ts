@@ -28,9 +28,8 @@ jest.mock('jsonwebtoken', () => ({
       }
     }), 
   sign: jest.fn().mockReturnValue("token")
-  
-  }));
 
+  }));
 
 let mongoServer = new MongoMemoryServer();
 

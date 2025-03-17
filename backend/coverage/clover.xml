@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1742175391474" clover="3.2.0">
-  <project timestamp="1742175391475" name="All files">
-    <metrics statements="437" coveredstatements="437" conditionals="122" coveredconditionals="122" methods="72" coveredmethods="72" elements="631" coveredelements="631" complexity="0" loc="437" ncloc="437" packages="6" files="17" classes="17"/>
+<coverage generated="1742175880333" clover="3.2.0">
+  <project timestamp="1742175880333" name="All files">
+    <metrics statements="440" coveredstatements="439" conditionals="124" coveredconditionals="123" methods="72" coveredmethods="72" elements="636" coveredelements="634" complexity="0" loc="440" ncloc="440" packages="6" files="17" classes="17"/>
     <package name="controllers">
-      <metrics statements="232" coveredstatements="232" conditionals="74" coveredconditionals="74" methods="43" coveredmethods="43"/>
+      <metrics statements="235" coveredstatements="234" conditionals="76" coveredconditionals="75" methods="43" coveredmethods="43"/>
       <file name="ChatController.ts" path="/home/btanady/cpen321/forked/Tomato/backend/controllers/ChatController.ts">
         <metrics statements="81" coveredstatements="81" conditionals="28" coveredconditionals="28" methods="13" coveredmethods="13"/>
         <line num="1" count="2" type="stmt"/>
@@ -162,7 +162,7 @@
         <line num="155" count="4" type="stmt"/>
       </file>
       <file name="RecommendationController.ts" path="/home/btanady/cpen321/forked/Tomato/backend/controllers/RecommendationController.ts">
-        <metrics statements="63" coveredstatements="63" conditionals="17" coveredconditionals="17" methods="12" coveredmethods="12"/>
+        <metrics statements="66" coveredstatements="65" conditionals="19" coveredconditionals="18" methods="12" coveredmethods="12"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
@@ -222,10 +222,13 @@
         <line num="98" count="51" type="stmt"/>
         <line num="99" count="10896" type="stmt"/>
         <line num="100" count="10896" type="stmt"/>
-        <line num="105" count="51" type="cond" truecount="1" falsecount="0"/>
-        <line num="106" count="5" type="stmt"/>
-        <line num="109" count="46" type="stmt"/>
-        <line num="110" count="405" type="stmt"/>
+        <line num="103" count="51" type="cond" truecount="1" falsecount="1"/>
+        <line num="104" count="51" type="stmt"/>
+        <line num="107" count="0" type="stmt"/>
+        <line num="112" count="51" type="cond" truecount="1" falsecount="0"/>
+        <line num="113" count="5" type="stmt"/>
+        <line num="116" count="46" type="stmt"/>
+        <line num="117" count="405" type="stmt"/>
       </file>
       <file name="UserController.ts" path="/home/btanady/cpen321/forked/Tomato/backend/controllers/UserController.ts">
         <metrics statements="18" coveredstatements="18" conditionals="3" coveredconditionals="3" methods="3" coveredmethods="3"/>

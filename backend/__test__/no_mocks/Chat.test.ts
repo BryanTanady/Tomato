@@ -6,7 +6,7 @@ import request from 'supertest';
 import { ChatController } from '../../controllers/ChatController';
 import { ChatModel } from '../../model/ChatModel';
 import { MessageModel } from '../../model/MessageModel';
-import { AuthenticatedRequest, isAuthenticatedRequest } from '../../types/AuthenticatedRequest';
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { ChatService } from '../../service/ChatService';
 import 'dotenv/config';
 
