@@ -234,7 +234,7 @@ describe("Testing createChat", () => {
 
     const main_user = "user123"
     const other_user = "String"
-    const first = await request(app)
+    await request(app)
       .post('/chats') 
       .send(newChat) 
       .expect(200);

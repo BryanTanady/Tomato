@@ -106,7 +106,7 @@ export class PostService {
             const posts = await this.getPosts(start_lat, end_lat, start_long, end_long)
 
             //filter to remove all private posts
-            const publicPosts = posts.filter(post => post.isPrivate === false)
+            const publicPosts = posts.filter(post => !post.isPrivate)
             return publicPosts
         } catch(err){
             if (err instanceof MissingCoordinateException) {
