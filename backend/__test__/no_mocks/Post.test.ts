@@ -66,7 +66,14 @@ app.post('/posts-from-other', (req, res, next) => {
     next(err);
   }}); 
 
-app.get('/posts/:id', postController.getPostById);  
+
+  let getPostWrapper = (req: Request, res: Response): void => {
+    postController.getPostById(req as AuthenticatedRequest, res)
+    .then(() => { return; })
+    .catch((err: unknown) => { return; });
+  }
+app.get('/posts/:id', getPostWrapper);  
+
 app.put('/posts/:id', (req, res, next) => {
   (req as AuthenticatedRequest).user = { id: 'user123' }; 
   next();

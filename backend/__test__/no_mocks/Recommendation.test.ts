@@ -45,9 +45,11 @@ RecommendationRoutes.forEach((route) => {
       },
   );
 });
-app.get('/recommendations-no-middlewware', async (req, res, next) : Promise<void> => {
+app.get('/recommendations-no-middlewware', (req, res, next) : void => {
     try {
-      await recommendationController.getRecommendation(req as AuthenticatedRequest, res)
+      recommendationController.getRecommendation(req as AuthenticatedRequest, res)
+      .then(() => { next(); })
+      .catch((err: unknown) => { next(err); });
     } catch(error) {
       next(error)
     }
@@ -55,9 +57,11 @@ app.get('/recommendations-no-middlewware', async (req, res, next) : Promise<void
 app.post('/posts', (req, res, next) => {
     (req as AuthenticatedRequest).user = { id: 'user123' }; 
     next();
-  }, async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+  }, (req: Request, res: Response, next: NextFunction): void => {
     try{
-      await postController.createPost(req as AuthenticatedRequest, res);
+      postController.createPost(req as AuthenticatedRequest, res)
+      .then(() => { next(); })
+      .catch((err: unknown) => { next(err); });
     } catch(err) {
       next(err);
     }});  

@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">98.57% </span>
+                <span class="strong">97.18% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>69/70</span>
+                <span class='fraction'>69/71</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">94.73% </span>
+                <span class="strong">89.47% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>18/19</span>
+                <span class='fraction'>17/19</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">98.48% </span>
+                <span class="strong">97.01% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>65/66</span>
+                <span class='fraction'>65/67</span>
             </div>
         
             
@@ -180,8 +180,7 @@
 <a name='L115'></a><a href='#L115'>115</a>
 <a name='L116'></a><a href='#L116'>116</a>
 <a name='L117'></a><a href='#L117'>117</a>
-<a name='L118'></a><a href='#L118'>118</a>
-<a name='L119'></a><a href='#L119'>119</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L118'></a><a href='#L118'>118</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -226,6 +225,9 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-yes">72x</span>
@@ -258,6 +260,9 @@
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">39x</span>
 <span class="cline-any cline-yes">39x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">39x</span>
 <span class="cline-any cline-yes">39x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -281,13 +286,6 @@
 <span class="cline-any cline-yes">51x</span>
 <span class="cline-any cline-yes">10896x</span>
 <span class="cline-any cline-yes">10896x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">51x</span>
-<span class="cline-any cline-yes">51x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -342,7 +340,10 @@ export class RecommendationController {
         let potential_places : string[] = []
         if (similar_users.length &gt; 0) {
             for (let i = 0; i &lt; 3 &amp;&amp; similar_users.length &gt; 0; i++) {
-                const most_similar : string = this.mode(similar_users) // userId
+                const most_similar : string | undefined = this.mode(similar_users) // userId
+                <span class="missing-if-branch" title="if path not taken" >I</span>if (!most_similar) {
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+                }
                 const most_similar_posts : Post[] | null = (await this.postService.getUserPost(most_similar, true))
                 if (most_similar_posts) {
                     most_similar_posts.forEach(sim_post =&gt; {
@@ -374,7 +375,10 @@ export class RecommendationController {
         let best_places = []
 &nbsp;
         while (potential_places.length &gt; 0 &amp;&amp; best_places.length &lt;= max) {
-            let best_place : string = this.mode(potential_places)
+            let best_place : string | undefined = this.mode(potential_places)
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (!best_place) {
+<span class="cstat-no" title="statement not covered" >                break;</span>
+            }
             best_places.push(best_place)
             potential_places = this.deleteOccurences(potential_places, best_place) as string[]
         }
@@ -395,18 +399,11 @@ export class RecommendationController {
         res.json({posts: best_posts})
     }
 &nbsp;
-    mode(arr : string[]) : string {
-        let result: string | undefined = arr.sort((a,b) =&gt;
+    mode(arr : string[]) : string | undefined {
+        return arr.sort((a,b) =&gt;
               arr.filter(v =&gt; v===a).length
             - arr.filter(v =&gt; v===b).length
         ).pop();
-        
-        if (result) {
-            return result;
-        }
-        else<span class="missing-if-branch" title="else path not taken" >E</span>{
-<span class="cstat-no" title="statement not covered" >            return ""</span>
-        }
     }
 &nbsp;
     deleteOccurences(a : string[], e : string) : string[] | -1 {
@@ -424,7 +421,7 @@ export class RecommendationController {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-17T01:48:48.679Z
+                at 2025-03-17T02:01:59.364Z
             </div>
         <script src="../prettify.js"></script>
         <script>
