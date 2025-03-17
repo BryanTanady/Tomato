@@ -10,7 +10,6 @@ import { ChatRoutes } from '../../routes/ChatRoutes';
 import { validationResult } from 'express-validator';
 import { ChatService } from '../../service/ChatService';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
-import jwt from 'jsonwebtoken';
 import { verifyToken } from '../../middleware/verifyToken'
 
 let mongoServer = new MongoMemoryServer();

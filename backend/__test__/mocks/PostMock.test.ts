@@ -11,7 +11,6 @@ import { validationResult } from 'express-validator';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { timingSafeEqual } from 'crypto';
 import {verifyToken} from '../../middleware/verifyToken';
-const VALID_ROUTE_METHODS = ['get', 'post', 'put', 'delete', 'patch']
 import type { JwtPayload, SignOptions} from 'jsonwebtoken';
 
 
@@ -37,9 +36,9 @@ jest.mock('jsonwebtoken', (): {
   }));
 
 
-  
 
-  
+const VALID_ROUTE_METHODS = ['get', 'post', 'put', 'delete', 'patch']
+
 let mongoServer = new MongoMemoryServer();
 const app = express();
 app.use(express.json());  
