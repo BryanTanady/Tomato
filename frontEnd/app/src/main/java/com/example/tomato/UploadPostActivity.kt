@@ -184,14 +184,10 @@ class UploadPostActivity : AppCompatActivity() {
             val postIsPrivate = postVisibility == "Private"
             val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
             val date: Date? = dateFormatter.parse(postDate)
-            Log.d(TAG, "postLatitude: $postLatitude, postLongitude: $postLongitude")
-            val body = JSONObject()
-                .put("latitude", postLatitude)
-                .put("longitude", postLongitude)
-                .put("images", imageArray)
-                .put("date", date)
-                .put("note", note)
-                .put("isPrivate", postIsPrivate)
+
+            val body = JSONObject().put("latitude", postLatitude).put("longitude", postLongitude)
+                .put("images", imageArray).put("date", date)
+                .put("note", note).put("isPrivate", postIsPrivate)
                 .toString()
 
             lifecycleScope.launch {
