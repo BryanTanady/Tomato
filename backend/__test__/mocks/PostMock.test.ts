@@ -11,6 +11,7 @@ import { validationResult } from 'express-validator';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { timingSafeEqual } from 'crypto';
 import {verifyToken} from '../../middleware/verifyToken';
+const VALID_ROUTE_METHODS = ['get', 'post', 'put', 'delete', 'patch']
 
 config();
 jest.mock('jsonwebtoken', () => ({
@@ -37,6 +38,9 @@ app.use(morgan('tiny'));
 const postService = new PostService();
 PostRoutes.forEach((route) => {
     const middlewares = (route ).protected ? [verifyToken] : []; // Add verifyToken only if protected
+    if (VALID_ROUTE_METHODS.indexOf(route.method) === -1) {
+        return;
+    }
   const method = route.method as keyof express.Application;
     app[method](
         route.route,

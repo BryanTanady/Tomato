@@ -23,9 +23,14 @@ const middleware = (req: AuthenticatedRequest, res: Request, next: NextFunction)
   req.user = { id: 'user123' }; 
   next();
 }
+const VALID_ROUTE_METHODS = ['get', 'post', 'put', 'delete', 'patch']
+
 RecommendationRoutes.forEach((route) => {
   const middlewares = (route ).protected ? [middleware] : []; // Add verifyToken only if protected
+  if (VALID_ROUTE_METHODS.indexOf(route.method) === -1) { return; }
+
   const method = route.method as keyof express.Application;
+
     app[method](
       route.route,
       ...middlewares,

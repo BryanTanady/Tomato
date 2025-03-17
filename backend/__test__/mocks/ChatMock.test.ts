@@ -27,10 +27,14 @@ jest.mock('jsonwebtoken', () => ({
   }));
 
 const chatService = new ChatService();
+const VALID_ROUTE_METHODS = ['get', 'post', 'put', 'delete', 'patch']
 
 //App routes
 ChatRoutes.forEach((route) => {
     const middlewares = (route).protected ? [verifyToken] : []; 
+    if (VALID_ROUTE_METHODS.indexOf(route.method) === -1) {
+        return;
+    }
     const method = route.method as keyof express.Application;
     app[method](
         route.route,
