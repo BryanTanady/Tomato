@@ -149,7 +149,7 @@ export class PostService {
                 // Use a Set to remove duplicates based on a unique identifier (e.g., post ID)
                 const uniquePosts = Array.from(new Set(combinedPosts.map(post => post._id.toString()))) // Use post._id to uniquely identify posts
                 .map(id => combinedPosts.find(post => post._id.toString() === id )) as Post[];
-                return uniquePosts.filter(post => post != null);
+                return uniquePosts
             }
         }
         catch (error) {

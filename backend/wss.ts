@@ -89,7 +89,9 @@ const startWSS = () => {
                 wss.clients.forEach(client => {
                     if (wsRoomMapping.get(client) === chatId && client.readyState === WebSocket.OPEN) {
                         client.send(JSON.stringify(message));
-                        if (client !== ws) recipientFound = true;
+                        if (client !== ws) {
+                            recipientFound = true;
+                        }
                     }
                 });
 

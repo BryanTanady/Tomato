@@ -25,10 +25,7 @@ jest.mock('jsonwebtoken', () => ({
   verify: jest.fn().mockReturnValue({id: "user123"}), 
   sign: jest.fn().mockReturnValue("token")
   }));
-const chatController = new ChatController();
-if (chatController === null) {
-  console.log("ChatController is null")
-}
+
 const chatService = new ChatService();
 
 //App routes
