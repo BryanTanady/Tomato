@@ -1,88 +1,117 @@
-import mongoose from "mongoose"
-import { ChatModel } from "../model/ChatModel"
-import { MessageModel } from "../model/MessageModel"
+import { ChatModel, IChat } from "../model/ChatModel";
+import { MessageModel, IMessage } from "../model/MessageModel";
 
 export class ChatService {
-    async createChat( member_1: string, member_2: string ) {
-        try {
-            const existChat = await ChatModel.findOne().or([{ member_1, member_2 }, { member_1: member_2, member_2: member_1 }])
-              
-            if (existChat) {
-                console.log("CHAT EXIST")
-                return existChat
-            }
-            const newChat = new ChatModel({ member_1, member_2})
-            await newChat.save()
-            return newChat
-        } catch(err) {
-            console.error("Error creating chat: " + err)
-            return null
-        }
+  async createChat(member_1: string, member_2: string): Promise<IChat | null> {
+    try {
+      const existChat = await ChatModel.findOne()
+        .or([{ member_1, member_2 }, { member_1: member_2, member_2: member_1 }])
+        .exec();
+      if (existChat) {
+        console.log("CHAT EXIST");
+        return existChat;
+      }
+      const newChat = new ChatModel({ member_1, member_2 });
+      return await newChat.save();
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Error creating chat: " + err.message);
+      } else {
+        console.error("Error creating chat", err);
+      }
+      return null;
     }
+  }
 
-    async getChatMessages(id: string) {
-        try {
-            const messages = await MessageModel.find({ chatroom_id: id })
-            return messages
-        } catch(err) {
-            console.error("Error getting chat messages: " + err)
-            return null
-        }
+  async getChatMessages(id: string): Promise<IMessage[] | null> {
+    try {
+      return await MessageModel.find({ chatroom_id: id }).exec();
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Error getting chat messages: " + err.message);
+      } else {
+        console.error("Error getting chat messages", err);
+      }
+      return null;
     }
+  }
 
-    // Get chat with chatId
-    async getChat(id: string) {
-        try {
-            const chat = await ChatModel.findOne({ _id: id})
-            return chat
-        } catch(err) {
-            console.error("Error getting chat: " + err)
-            return null
-        }
+  async getChat(id: string): Promise<IChat | null> {
+    try {
+      return await ChatModel.findOne({ _id: id }).exec();
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Error getting chat: " + err.message);
+      } else {
+        console.error("Error getting chat", err);
+      }
+      return null;
     }
+  }
 
-    // Get chat with userId
-    async getChats(id: string) {
-        try {
-            const chats = await ChatModel.find().or([{ member_1 : id}, {member_2: id}])
-            return chats
-        } catch(err) {
-            console.error("Error getting chats: " + err)
-            return null
-        }
+  async getChats(id: string): Promise<IChat[] | null> {
+    try {
+      return await ChatModel.find().or([{ member_1: id }, { member_2: id }]).exec();
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Error getting chats: " + err.message);
+      } else {
+        console.error("Error getting chats", err);
+      }
+      return null;
     }
+  }
 
-    async deleteChat(id: string) {
-        try {
-            await MessageModel.deleteMany({ chatroom_id: id })
-            const chat = await ChatModel.findById(id)
-            await chat?.deleteOne()
-            return chat
-        } catch(err) {
-            console.error("Error deleting chat: " + err)
-            return null
-        }
+  async deleteChat(id: string): Promise<IChat | null> {
+    try {
+      await MessageModel.deleteMany({ chatroom_id: id }).exec();
+      const chat = await ChatModel.findById(id).exec();
+      if (chat) {
+        await chat.deleteOne();
+      }
+      return chat;
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Error deleting chat: " + err.message);
+      } else {
+        console.error("Error deleting chat", err);
+      }
+      return null;
     }
+  }
 
-    async addMessage(chatroom_id: string, sender: string, message: string) {
-        try {    
-            const newMessage = new MessageModel({ chatroom_id: chatroom_id, sender: sender, message: message })
-            await newMessage.save()
-            return newMessage
-        } catch(err) {
-            console.error("Error adding message: " + err)
-            return null
-        }
+  async addMessage(
+    chatroom_id: string,
+    sender: string,
+    message: string
+  ): Promise<IMessage | null> {
+    try {
+      const newMessage = new MessageModel({ chatroom_id, sender, message });
+      return await newMessage.save();
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Error adding message: " + err.message);
+      } else {
+        console.error("Error adding message", err);
+      }
+      return null;
     }
+  }
 
-    async deleteMessage(id: string) {
-        try {
-            const message = await MessageModel.findById(id)
-            await message?.deleteOne()
-            return message
-        } catch(err) {
-            console.error("Error deleting message: " + err)
-            return null
-        }
+  async deleteMessage(id: string): Promise<IMessage | null> {
+    try {
+      const message = await MessageModel.findById(id).exec();
+      if (message) {
+        await message.deleteOne();
+      }
+      return message;
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Error deleting message: " + err.message);
+      } else {
+        console.error("Error deleting message", err);
+      }
+      return null;
     }
+  }
 }

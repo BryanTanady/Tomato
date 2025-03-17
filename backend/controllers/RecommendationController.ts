@@ -1,5 +1,6 @@
 import { AuthenticatedRequest } from "..";
-import { Post, PostService } from "../service/PostService";
+import {Post } from "../model/PostModel";
+import { PostService } from "../service/PostService";
 import { NextFunction, Response} from "express";
 
 export class RecommendationController {

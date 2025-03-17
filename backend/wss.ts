@@ -2,110 +2,128 @@ import WebSocket from 'ws';
 import { ChatService } from './service/ChatService';
 import { UserService } from './service/UserService';
 import admin from "firebase-admin";
+import {ServiceAccount} from "firebase-admin";
+import { Message } from 'firebase-admin/messaging';
+import serviceAccount from "./serviceAccountKey.json";
 
-// Load Firebase credentials
-const serviceAccount = require("./serviceAccountKey.json");
+const firebaseCreds = {
+    projectId: serviceAccount.project_id,
+    clientEmail: serviceAccount.client_email,
+    privateKey: serviceAccount.private_key,
+    // Add other required fields if necessary
+  };
 
+// Firebase Admin initialization with type-safe credentials
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+    credential: admin.credential.cert(firebaseCreds as ServiceAccount)
 });
+
+interface ChatInfo {
+  member_1: string;
+  member_2: string;
+}
+
+interface UserInfo {
+  firebaseToken: string[];
+}
 
 const startWSS = () => {
     const chatService = new ChatService();
-    const userService = new UserService()
+    const userService = new UserService();
     const wssPort = Number(process.env.WSS_PORT) || 3001;
     const wss = new WebSocket.Server({ host: '0.0.0.0', port: wssPort });
-    const wsRoomMapping = new Map();
+    const wsRoomMapping = new Map<WebSocket, string>();
 
     wss.on('listening', () => {
-        console.log(`WebSocket server is running on ws://localhost:${wssPort}`);
+        console.log(`WebSocket server running on ws://localhost:${wssPort}`);
     });
 
     wss.on('connection', (ws, req) => {
-        console.log("CONNECTION!")
-        const urlParams = new URLSearchParams((req as any).url.slice(1)); 
+        console.log("New connection established");
+
+        // Safely extract query parameters
+        const queryString = req.url?.split('?')[1] || '';
+        const urlParams = new URLSearchParams(queryString);
         const chatId = urlParams.get('chatId');
-        
+
         if (!chatId) {
-            console.error('Chatroom ID not provided');
-            ws.close();
+            console.error('Connection rejected: Missing chat ID');
+            ws.close(4001, 'Chat ID required');
             return;
         }
 
         wsRoomMapping.set(ws, chatId);
 
-        ws.on('message', async (data: any) => {
+        ws.on('message', async (data: WebSocket.Data) => {
             try {
-                const message = JSON.parse(data.toString()); 
-                chatService.addMessage(chatId, message.sender, message.message);
-                const chatInfo = await chatService.getChat(chatId)
-                let receiverId = ""
-                if (chatInfo) {
-                    receiverId = ((message.sender == chatInfo.member_1) ? chatInfo.member_2 : chatInfo.member_1) || ""
+                // Validate and parse message
+                const rawData = data.toString();
+                const message = JSON.parse(rawData) as { sender?: string; message?: string };
+                
+                if (!message.sender || !message.message) {
+                    throw new Error('Invalid message structure');
                 }
+
+                // Persist message
+                await chatService.addMessage(chatId, message.sender, message.message);
+                
+                // Determine recipient
+                const chatInfo = await chatService.getChat(chatId) as ChatInfo | null;
+                if (!chatInfo) {
+                    throw new Error('Chat room not found');
+                }
+
+                const receiverId = message.sender === chatInfo.member_1 
+                    ? chatInfo.member_2 
+                    : chatInfo.member_1;
+
                 if (!receiverId) {
-                    console.error("Cannot find this user")
+                    throw new Error('Invalid chat configuration');
                 }
-                const receiverInfo = await userService.getUser(receiverId)
-                const receiverFirebaseToken = receiverInfo?.firebaseToken || [""]
+
+                // Get recipient information
+                const receiverInfo = await userService.getUser(receiverId) as UserInfo | null;
+                const receiverTokens = receiverInfo?.firebaseToken || [];
+
+                // Broadcast message and handle notifications
                 let recipientFound = false;
-                for (let client of wss.clients) {
-                    if (wsRoomMapping.get(client) === chatId) {
-                        if (client.readyState === WebSocket.OPEN) {
-                            client.send(JSON.stringify(message));
-                            if (client !== ws) {
-                                recipientFound = true;
-                            }
-                        }
+                wss.clients.forEach(client => {
+                    if (wsRoomMapping.get(client) === chatId && client.readyState === WebSocket.OPEN) {
+                        client.send(JSON.stringify(message));
+                        if (client !== ws) recipientFound = true;
                     }
-                }
-                if (!recipientFound) {
-                    for (let token of receiverFirebaseToken) {
-                        if (token) {
-                            sendPushNotification(token, message.message, chatId)
-                        }
-                    }
+                });
+
+                // Send push notification if recipient offline
+                if (!recipientFound && receiverTokens.length > 0) {
+                    receiverTokens.forEach(token => {
+                        if (token) sendPushNotification(token, message.message!, chatId);
+                    });
                 }
             } catch (error) {
-                console.error(`Error processing message: ${error}`);
+                console.error('Message processing error:', error instanceof Error ? error.message : error);
             }
         });
     });
 };
 
-// Function to send push notification
-function sendPushNotification(token: string, message: string, chatId: string) {
-    const payload = {
+// Type-safe notification sender
+function sendPushNotification(token: string, messageBody: string, chatId: string): void {
+    const payload: Message = {
         notification: {
-            title: "You have a new Message",
-            body: message,
+            title: "New Message",
+            body: messageBody,
         },
-        token: token,
-        data: {
-            chatId: chatId,
-        },
-        android: {
-            priority: "high"
-        },
-        apns: {
-            headers: {
-                "apns-priority": "10",
-            },
-        },
-        webpush: {
-            headers: {
-                urgency: "high",
-            },
-        },
+        token,
+        data: { chatId },
+        android: { priority: "high" },
+        apns: { headers: { "apns-priority": "10" } },
+        webpush: { headers: { urgency: "high" } }
     };
 
-    admin.messaging().send(payload as any)
-        .then((response: any) => {
-            console.log("Successfully sent message:", response);
-        })
-        .catch((error: any) => {
-            console.log("Error sending message:", error);
-        });
+    admin.messaging().send(payload)
+        .then(response => console.log("Notification delivered:", response))
+        .catch(error => console.error("Notification failed:", error));
 }
 
 export default startWSS;

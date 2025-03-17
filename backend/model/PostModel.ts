@@ -1,19 +1,27 @@
-import mongoose from "mongoose"
+import mongoose, { Model } from "mongoose";
 
-const Schema = mongoose.Schema;
+// Define the Post interface
+export interface Post extends mongoose.Document {
+    _id: string;
+    latitude: number;
+    longitude: number;
+    userId: string;
+    images: { fileData: Buffer; fileType: string }[];
+    date: Date;
+    note: string;
+    isPrivate: boolean;
+}
 
-
-const PostModelSchema = new Schema({
-  latitude: Number,
-  longitude: Number,
-  userId: String,
-  images: [{
-    fileData: Buffer,
-    fileType: String
-  }],
-  date: Date,
-  note: String,
-  isPrivate: Boolean
+// Define the schema with the Post type
+const PostModelSchema = new mongoose.Schema<Post>({
+    latitude: Number,
+    longitude: Number,
+    userId: String,
+    images: [{ fileData: Buffer, fileType: String }],
+    date: Date,
+    note: String,
+    isPrivate: Boolean
 });
 
-export const PostModel = mongoose.model("Post", PostModelSchema);
+// Export the typed model
+export const PostModel: Model<Post> = mongoose.model<Post>("Post", PostModelSchema);

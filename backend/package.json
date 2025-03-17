@@ -3,14 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "ts-node -r dotenv/config index.ts",
     "dev": "dotenv -e .env -- npx nodemon -e .ts index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/express": "^5.0.0",
     "express": "^4.21.2",
     "express-validator": "^7.2.1",
     "firebase-admin": "^13.1.0",
@@ -26,12 +25,18 @@
     "ws": "^8.18.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/morgan": "^1.9.9",
     "@types/ws": "^8.5.14",
     "dotenv": "^16.4.7",
     "dotenv-cli": "^8.0.0",
-    "nodemon": "^3.1.9"
+    "eslint": "^9.22.0",
+    "eslint-config-standard": "^17.1.0",
+    "globals": "^16.0.0",
+    "nodemon": "^3.1.9",
+    "typescript-eslint": "^8.26.1"
   },
   "description": ""
 }

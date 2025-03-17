@@ -1,10 +1,13 @@
-import mongoose from "mongoose"
+import mongoose, { Document, Schema } from "mongoose";
 
-const Schema = mongoose.Schema;
+export interface IChat extends Document {
+  member_1: string;
+  member_2: string;
+}
 
-const ChatModelSchema = new Schema({
-    member_1: String,
-    member_2: String
+const ChatModelSchema: Schema = new Schema({
+  member_1: { type: String, required: true },
+  member_2: { type: String, required: true }
 });
 
-export const ChatModel = mongoose.model("Chat", ChatModelSchema);
+export const ChatModel = mongoose.model<IChat>("Chat", ChatModelSchema);
