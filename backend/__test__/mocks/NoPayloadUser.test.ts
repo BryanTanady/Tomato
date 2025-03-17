@@ -6,33 +6,43 @@ import request from 'supertest';
 import { UserController } from '../../controllers/UserController';
 import { UserModel } from '../../model/UserModel';
 
-jest.mock('jsonwebtoken', (): {
-  verify: jest.Mock<(token: string, secret: string, callback?: (err: unknown, decoded?: string | { id: string }) => void) => string | { id: string }>;
-  sign: jest.Mock<(payload: object | string, secret: string) => string>;
-} => {
-  const actualJWT = jest.requireActual('jsonwebtoken');
+jest.mock('jsonwebtoken', () => {
+  const actualJWT = jest.requireActual<typeof import('jsonwebtoken')>('jsonwebtoken');
+  
   return {
-    ...actualJWT, 
-    verify: jest.fn().mockImplementation((token: string, secret: string, callback?: (err: unknown, decoded?: { id: string }) => void) => {
-      if (callback) return callback(null, { id: "user123" });
-      return { id: "user123" }; // Simulate a valid decoded token
-    }),
-    sign: jest.fn().mockReturnValue("token")
+    ...actualJWT,
+    verify: jest.fn().mockImplementation((
+      token: string,
+      secret: string,
+      callback?: (err: unknown, decoded?: { id: string }) => void
+    ) => {
+      if (callback) {
+        callback(null, { id: "user123" });
+        return;
+      }
+      return { id: "user123" };
+    }) as jest.Mock<
+      { id: string } | undefined,
+      [string, string, ((err: unknown, decoded?: { id: string }) => void)?]
+    >,
+    sign: jest.fn().mockImplementation(
+      (payload: string | object, secret: string) => "token"
+    ) as jest.Mock<string, [string | object, string]>
   };
 });
 
-jest.mock("google-auth-library", (): {
-  OAuth2Client: jest.Mock
-} => {
+jest.mock("google-auth-library", (): { OAuth2Client: jest.Mock } => {
   return {
     OAuth2Client: jest.fn().mockImplementation((): {
-      verifyIdToken: () => Promise<{ getPayload: () => { email: string } }>
+      verifyIdToken: jest.Mock<Promise<{
+        getPayload: () => { email: string }
+      }>, [unknown]>
     } => ({
-      verifyIdToken: jest.fn().mockResolvedValue({
-        getPayload: (): { email: string } => ({
-          email: "email"
-        })
-      })
+      verifyIdToken: jest.fn().mockImplementation((): Promise<{
+        getPayload: () => { email: string }
+      }> => Promise.resolve({
+        getPayload: (): { email: string } => ({ email: "email" })
+      }))
     }))
   };
 });
