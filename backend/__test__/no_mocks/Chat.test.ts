@@ -6,7 +6,7 @@ import request from 'supertest';
 import { ChatController } from '../../controllers/ChatController';
 import { ChatModel } from '../../model/ChatModel';
 import { MessageModel } from '../../model/MessageModel';
-import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
+import { AuthenticatedRequest, isAuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { ChatService } from '../../service/ChatService';
 import 'dotenv/config';
 
@@ -53,7 +53,7 @@ app.post('/chats-no-middleware',  (req: Request, res: Response, next: NextFuncti
   }});
 // getChatMessages routes for testing
 app.get('/chats/:id', (req, res, next) => {
-    (req as any).user = { id: 'user123' }; 
+    (req as AuthenticatedRequest).user = { id: 'user123' }; 
     next();
   },  (req: Request, res: Response, next: NextFunction): void => {
     try{
@@ -74,7 +74,7 @@ app.get('/chats-no-middleware/:id',  (req: Request, res: Response, next: NextFun
 
 // getChats routes for testing
 app.get('/chats', (req, res, next) => {
-    (req as any).user = { id: 'user123' }; 
+    (req as AuthenticatedRequest).user = { id: 'user123' }; 
     next();
   }, (req: Request, res: Response, next: NextFunction): void => {
     try{
@@ -95,7 +95,7 @@ app.get('/chats-unauthorized',  (req: Request, res: Response, next: NextFunction
 
 // addMessage routes for testing
 app.post('/chat/:id', (req, res, next) => {
-    (req as any).user = { id: 'user123' }; 
+    (req as AuthenticatedRequest).user = { id: 'user123' }; 
     next();
   }, (req: Request, res: Response, next: NextFunction): void => {
     try{
@@ -106,7 +106,8 @@ app.post('/chat/:id', (req, res, next) => {
       next(err);
     }});
 app.post('/chat-string/:id', (req, res, next) => {
-    (req as any).user = { id: 'string' }; 
+    
+    (req as AuthenticatedRequest).user = { id: 'string' }; 
     next();
   },  (req: Request, res: Response, next: NextFunction): void => {
     try{
@@ -127,7 +128,7 @@ app.post('/chat-no-middleware/:id',  (req: Request, res: Response, next: NextFun
 
 // deleteChat routes for testing
 app.delete('/chats/:id', (req, res, next) => {
-    (req as any).user = { id: 'user123' }; 
+    (req as AuthenticatedRequest).user = { id: 'user123' }; 
     next();
   },  (req: Request, res: Response, next: NextFunction): void => {
     try{
@@ -148,7 +149,7 @@ app.delete('/chats-no-middleware/:id',  (req: Request, res: Response, next: Next
 
 // deleteMessage routes for testing
 app.delete('/chat/:id/messages/:message_id', (req, res, next) => {
-    (req as any).user = { id: 'user123' }; 
+    (req as AuthenticatedRequest).user = { id: 'user123' }; 
     next();
   },  (req: Request, res: Response, next: NextFunction): void => {
     try{

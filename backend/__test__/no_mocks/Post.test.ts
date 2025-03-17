@@ -14,7 +14,7 @@ app.use(morgan('tiny'));
 
 const postController = new PostController();
 app.get('/posts-authenticated', (req : Request, res : Response, next : NextFunction) => {
-  (req as any).user = { id: 'user123' }; 
+  (req as AuthenticatedRequest).user = { id: 'user123' }; 
   next();
 },  (req: Request, res: Response, next: NextFunction): void => {
   try {
@@ -36,7 +36,7 @@ app.get('/posts-authenticated-not',  (req: Request, res: Response, next: NextFun
 }); 
 
 app.post('/posts', (req, res, next) => {
-  (req as any).user = { id: 'user123' };
+  (req as AuthenticatedRequest).user = { id: 'user123' };
   next();
 },  (req: Request, res: Response, next: NextFunction): void => {
   try{
@@ -68,7 +68,7 @@ app.post('/posts-from-other', (req, res, next) => {
 
 app.get('/posts/:id', postController.getPostById);  
 app.put('/posts/:id', (req, res, next) => {
-  (req as any).user = { id: 'user123' }; 
+  (req as AuthenticatedRequest).user = { id: 'user123' }; 
   next();
 },  (req: Request, res: Response, next: NextFunction): void => {
   try{
@@ -87,7 +87,7 @@ app.put('/posts-not-auth/:id',  (req: Request, res: Response, next: NextFunction
     next(err);
   }});    
 app.delete('/posts/:id', (req, res, next) => {
-  (req as any).user = { id: 'user123' }; 
+  (req as AuthenticatedRequest).user = { id: 'user123' }; 
   next();
 },  (req: Request, res: Response, next: NextFunction): void => {
   try{
