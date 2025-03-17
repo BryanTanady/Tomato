@@ -42,7 +42,7 @@ app.post('/posts', verifyToken, (req: Request, res: Response, next: NextFunction
   try{
     postController.createPost(req as AuthenticatedRequest, res)
     .then(() => next())
-    .catch((err) => next(err));
+    .catch((err: unknown) => next(err));
   } catch(err) {
     next(err);
   }}); 
