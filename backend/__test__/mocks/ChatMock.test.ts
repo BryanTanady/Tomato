@@ -282,7 +282,7 @@ describe('Testing getChat', () => {
       .set('Authorization', 'Bearer 90909090')
       .expect(200);
     
-    const response = await chatService.getChat(chat.body._id);
+    const response = await chatService.getChat(chat.body._id as string);
     expect(response).toBeNull()
     spy.mockClear()
   });

@@ -69,9 +69,11 @@ app.post('/posts', (req, res, next) => {
 app.post('/posts-from-other', (req, res, next) => {
     (req as AuthenticatedRequest).user = { id: 'other' }; 
     next();
-  }, async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+  }, (req: Request, res: Response, next: NextFunction): void => {
     try{
-      await postController.createPost(req as AuthenticatedRequest, res);
+      postController.createPost(req as AuthenticatedRequest, res)
+      .then(() => { next(); })
+      .catch((err: unknown) => { next(err); });
     } catch(err) {
       next(err);
     }});  

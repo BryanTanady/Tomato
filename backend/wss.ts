@@ -90,7 +90,7 @@ const startWSS = () => {
                         if (!receiverInfo) {
                             throw new Error('Recipient not found');
                         }
-                        const receiverTokens = receiverInfo?.firebaseToken;
+                        const receiverTokens = receiverInfo.firebaseToken;
     
                         // Broadcast message and handle notifications
                         let recipientFound = false;
@@ -115,14 +115,14 @@ const startWSS = () => {
                         }
 
                     })
-                    .catch(error => {
+                    .catch((error: unknown) => {
                         console.error('Error fetching recipient:', error);
                         return null;
                     });
                     
                    
                 })
-                .catch(error => {
+                .catch((error: unknown) => {
                     console.error('Error fetching chat:', error);
                     return null;
                 });
