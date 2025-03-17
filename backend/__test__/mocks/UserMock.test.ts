@@ -9,8 +9,6 @@ import { UserRoutes } from '../../routes/UserRoutes';
 import {verifyToken} from '../../middleware/verifyToken';
 import { validationResult } from 'express-validator';
 import * as jwt from 'jsonwebtoken'; 
-import { mocked } from 'jest-mock';
-
 
 jest.mock('jsonwebtoken', (): {
   verify: jest.Mock<jwt.JwtPayload, [string, string]>;

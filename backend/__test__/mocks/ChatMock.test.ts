@@ -20,10 +20,13 @@ config();
 app.use(express.json());  
 app.use(morgan('tiny')); 
 
-jest.mock('jsonwebtoken', () => ({
+jest.mock('jsonwebtoken', (): {
+  verify: jest.Mock<(token: string) => {id: string}>;
+  sign: jest.Mock<() => string>;
+} => ({
   ...jest.requireActual('jsonwebtoken'), 
-  verify: jest.fn().mockReturnValue({ id: "user123" }) as typeof jwt.verify,
-  sign: jest.fn().mockReturnValue("token") as typeof jwt.sign,
+  verify: jest.fn().mockReturnValue({ id: "user123" }),
+  sign: jest.fn().mockReturnValue("token")
   }));
 
 const chatService = new ChatService();

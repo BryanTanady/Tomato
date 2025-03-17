@@ -12,9 +12,14 @@ import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { timingSafeEqual } from 'crypto';
 import {verifyToken} from '../../middleware/verifyToken';
 const VALID_ROUTE_METHODS = ['get', 'post', 'put', 'delete', 'patch']
+import type { JwtPayload, SignOptions} from 'jsonwebtoken';
+
 
 config();
-jest.mock('jsonwebtoken', () => ({
+jest.mock('jsonwebtoken', (): {
+  verify: jest.Mock<JwtPayload, [string, string]>;
+  sign: jest.Mock<string, [JwtPayload, string, SignOptions?]>;
+} => ({
   ...jest.requireActual('jsonwebtoken'),
   verify: jest.fn().mockImplementation((token: string):  {id: string}=>
     {
@@ -30,6 +35,9 @@ jest.mock('jsonwebtoken', () => ({
     }),
   sign: jest.fn().mockReturnValue("token")
   }));
+
+
+  
 
   
 let mongoServer = new MongoMemoryServer();
