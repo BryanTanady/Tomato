@@ -8,13 +8,18 @@ import { UserService } from '../../service/UserService';
 import { UserRoutes } from '../../routes/UserRoutes';
 import {verifyToken} from '../../middleware/verifyToken';
 import { validationResult } from 'express-validator';
+import { JwtPayload } from 'jsonwebtoken';
 
-jest.mock('jsonwebtoken', () => ({
-...jest.requireActual('jsonwebtoken'),
-verify: jest.fn().mockReturnValue({id: "user123"}), 
-sign: jest.fn().mockReturnValue("token")
-}));
 
+jest.mock('jsonwebtoken', () => {
+  const actualJwt = jest.requireActual<typeof import('jsonwebtoken')>('jsonwebtoken');
+
+  return {
+    ...actualJwt,
+    verify: jest.fn().mockReturnValue({ id: "user123" } as JwtPayload), 
+    sign: jest.fn().mockReturnValue("token" as string)
+  };
+});
 
 jest.mock("google-auth-library", () => {
   return {
