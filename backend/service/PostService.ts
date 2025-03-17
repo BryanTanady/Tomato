@@ -156,7 +156,7 @@ export class PostService {
             if (error instanceof MissingCoordinateException) {
                 throw new MissingCoordinateException("Incomplete Coordinate Information");
             } else {
-                console.log("Error getting posts", error);
+                console.error("Error getting posts", error);
                 return null;
             }
         }

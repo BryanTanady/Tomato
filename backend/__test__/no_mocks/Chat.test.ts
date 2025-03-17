@@ -483,7 +483,7 @@ describe('Testing deleteMessage', () => {
   it('should fail to delete non-existant message', async () => {
     const newId = new mongoose.Types.ObjectId(0)
     await request(app)
-      .delete(`/chat/${newId}/messages/${newId}`) 
+      .delete(`/chat/${newId.toString()}/messages/${newId.toString()}`) 
       .expect(404);
   });
 
