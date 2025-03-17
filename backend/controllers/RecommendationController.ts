@@ -60,8 +60,8 @@ export class RecommendationController {
 
             if (every_post) {
                 every_post.forEach(all_post => {
-                    let lati : number = all_post.latitude as number//? all_post.latitude : 0
-                    let longi : number = all_post.longitude as number//? all_post.longitude : 0
+                    let lati : number = all_post.latitude
+                    let longi : number = all_post.longitude
                     const curr_coord : string = lati.toString().concat(" ", longi.toString())
                     if (!just_coords.includes(curr_coord)) {
                         potential_places.push(curr_coord)

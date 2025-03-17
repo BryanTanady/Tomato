@@ -34,7 +34,7 @@ app.post('/user-faulty/auth',  (req: Request, res: Response, next: NextFunction)
     try {
         userController.handleGoogleSignIn(req, res)
         .then(() => { next(); })
-        .catch((error: unknown) => next(error));
+        .catch((error: unknown) => { next(error); });
     } catch (error) {
         next(error);
     }});  
