@@ -56,7 +56,7 @@ const startWSS = () => {
         ws.on('message', (data: WebSocket.Data): void => {
             try {
                 // Validate and parse message
-                const rawData = data.toString();
+                const rawData = Buffer.isBuffer(data) ? data.toString('utf8') : (typeof data === 'object' ? JSON.stringify(data) : data.toString());
                 const message = JSON.parse(rawData) as { sender?: string; message?: string };
                 
                 if (!message.sender || !message.message) {
