@@ -9,17 +9,18 @@ import { UserRoutes } from '../../routes/UserRoutes';
 import {verifyToken} from '../../middleware/verifyToken';
 import { validationResult } from 'express-validator';
 import * as jwt from 'jsonwebtoken'; 
+import { mocked } from 'jest-mock';
+
 
 jest.mock('jsonwebtoken', () => {
   const actual = jest.requireActual<typeof jwt>('jsonwebtoken');
   
-  return {
+  return mocked({
     ...actual,
-    verify: jest.fn().mockReturnValue({ id: 'newUser' } as jwt.JwtPayload),
-    sign: jest.fn().mockReturnValue('newToken' as string)
-  } satisfies typeof jwt;
+    verify: jest.fn().mockReturnValue({ id: 'newUser' }),
+    sign: jest.fn().mockReturnValue('newToken')
+  }, { shallow: false }) as typeof jwt;
 });
-
 
 jest.mock('jsonwebtoken', () => {
   const actualJwt = jest.requireActual<typeof jwt>('jsonwebtoken'); 
