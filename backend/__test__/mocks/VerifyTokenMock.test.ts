@@ -13,7 +13,7 @@ const {verifyToken} = require('../../middleware/verifyToken')
 config();
 jest.mock('jsonwebtoken', () => ({
   ...jest.requireActual('jsonwebtoken'),
-  verify: jest.fn().mockImplementation((token: string) =>
+  verify: jest.fn().mockImplementation((token: string): {id: string} =>
     {
       const expectedToken = Buffer.from("90909090");
       const receivedToken = Buffer.from(token);
