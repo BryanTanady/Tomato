@@ -8,6 +8,7 @@ import { UserService } from '../../service/UserService';
 import { UserRoutes } from '../../routes/UserRoutes';
 import {verifyToken} from '../../middleware/verifyToken';
 import { validationResult } from 'express-validator';
+import { Route } from '../../routes/RouteInterface';
 
 jest.mock('jsonwebtoken', () => ({
 ...jest.requireActual('jsonwebtoken'),
@@ -36,7 +37,7 @@ app.use(morgan('tiny'));
 // const userController = new UserController();
 const userService = new UserService();
 UserRoutes.forEach((route) => {
-  const middlewares = (route as any).protected ? [verifyToken] : [];
+  const middlewares = (route as Route).protected ? [verifyToken] : [];
 
   (app as any)[route.method](
       route.route,

@@ -12,6 +12,7 @@ import { ChatService } from '../../service/ChatService';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 
 import { verifyToken } from '../../middleware/verifyToken'
+import { Route } from '../../routes/RouteInterface';
 
 let mongoServer = new MongoMemoryServer();
 
@@ -30,7 +31,7 @@ const chatService = new ChatService();
 
 //App routes
 ChatRoutes.forEach((route) => {
-    const middlewares = (route as any).protected ? [verifyToken] : []; 
+    const middlewares = (route as Route).protected ? [verifyToken] : []; 
 
     (app as any)[route.method](
         route.route,

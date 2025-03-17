@@ -9,6 +9,7 @@ import { PostController } from '../../controllers/PostController';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { RecommendationRoutes } from '../../routes/RecommendationRoutes';
 import { validationResult } from 'express-validator';
+import { Route } from '../../routes/RouteInterface';
 import 'dotenv/config';
 
 let mongoServer = new MongoMemoryServer();
@@ -24,7 +25,7 @@ const middleware = (req: AuthenticatedRequest, res: Request, next: NextFunction)
   next();
 }
 RecommendationRoutes.forEach((route) => {
-  const middlewares = (route as any).protected ? [middleware] : []; // Add verifyToken only if protected
+  const middlewares = (route as Route).protected ? [middleware] : []; // Add verifyToken only if protected
 
   (app as any)[route.method](
       route.route,
