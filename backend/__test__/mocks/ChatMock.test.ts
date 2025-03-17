@@ -10,6 +10,7 @@ import { ChatRoutes } from '../../routes/ChatRoutes';
 import { validationResult } from 'express-validator';
 import { ChatService } from '../../service/ChatService';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
+import jwt from 'jsonwebtoken';
 
 import { verifyToken } from '../../middleware/verifyToken'
 
@@ -19,12 +20,40 @@ const app = express();
 config();
 app.use(express.json());  
 app.use(morgan('tiny')); 
-
+// Mock the entire 'jsonwebtoken' module
 jest.mock('jsonwebtoken', () => ({
-  ...jest.requireActual('jsonwebtoken'), 
-  verify: jest.fn().mockReturnValue({id: "user123"}), 
-  sign: jest.fn().mockReturnValue("token")
-  }));
+  ...jest.requireActual('jsonwebtoken'), // Preserve the actual implementation of other functions
+  verify: jest.fn().mockImplementation((token: string, secret: string) => {
+    return { id: "user123" }; // Mock implementation of verify
+  }),
+  sign: jest.fn().mockImplementation((payload: object, secret: string) => {
+    return "token"; // Mock implementation of sign
+  }),
+}));
+
+// TypeScript-friendly mock setup
+const mockedJwt = jwt as jest.Mocked<typeof jwt>;
+
+// Example test
+describe('VerifyTokenMock', () => {
+  it('should mock jwt.verify correctly', () => {
+    const token = "mockToken";
+    const secret = "mockSecret";
+
+    const decoded = mockedJwt.verify(token, secret);
+    expect(decoded).toEqual({ id: "user123" });
+    expect(mockedJwt.verify).toHaveBeenCalledWith(token, secret);
+  });
+
+  it('should mock jwt.sign correctly', () => {
+    const payload = { id: "user123" };
+    const secret = "mockSecret";
+
+    const token = mockedJwt.sign(payload, secret);
+    expect(token).toBe("token");
+    expect(mockedJwt.sign).toHaveBeenCalledWith(payload, secret);
+  });
+});
 
 const chatService = new ChatService();
 const VALID_ROUTE_METHODS = ['get', 'post', 'put', 'delete', 'patch']

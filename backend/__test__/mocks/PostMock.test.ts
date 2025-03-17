@@ -11,29 +11,65 @@ import { validationResult } from 'express-validator';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { timingSafeEqual } from 'crypto';
 import {verifyToken} from '../../middleware/verifyToken';
-const VALID_ROUTE_METHODS = ['get', 'post', 'put', 'delete', 'patch']
+import jwt from 'jsonwebtoken';
+
 
 config();
+
+// Mock the 'jsonwebtoken' module
 jest.mock('jsonwebtoken', () => ({
-  ...jest.requireActual('jsonwebtoken'),
-  verify: jest.fn().mockImplementation((token: string):  {id: string}=>
-    {
-      const expectedToken = Buffer.from("90909090");
-      const receivedToken = Buffer.from(token);
-      if (receivedToken.length === expectedToken.length && 
-          timingSafeEqual(receivedToken, expectedToken)) {
-          return { id: "user123" };
-      }
-      else {
-        return {id: "other"}
-      }
-    }),
-  sign: jest.fn().mockReturnValue("token")
-  }));
+  ...jest.requireActual('jsonwebtoken'), // Preserve the actual implementation of other functions
+  verify: jest.fn().mockImplementation((token: string): { id: string } => {
+    const expectedToken = Buffer.from("90909090");
+    const receivedToken = Buffer.from(token);
+
+    // Use timingSafeEqual for secure comparison
+    if (receivedToken.length === expectedToken.length && timingSafeEqual(receivedToken, expectedToken)) {
+      return { id: "user123" }; // Return mock payload for valid token
+    } else {
+      return { id: "other" }; // Return mock payload for invalid token
+    }
+  }),
+  sign: jest.fn().mockReturnValue("token"), // Mock implementation of sign
+}));
+
+// TypeScript-friendly mock setup
+const mockedJwt = jwt as jest.Mocked<typeof jwt>;
+
+// Example tests
+describe('Mocked jsonwebtoken', () => {
+  it('should mock jwt.verify correctly for valid token', () => {
+    const validToken = "90909090";
+    const decoded = mockedJwt.verify(validToken, "mockSecret");
+
+    expect(decoded).toEqual({ id: "user123" });
+    expect(mockedJwt.verify).toHaveBeenCalledWith(validToken, "mockSecret");
+  });
+
+  it('should mock jwt.verify correctly for invalid token', () => {
+    const invalidToken = "invalid";
+    const decoded = mockedJwt.verify(invalidToken, "mockSecret");
+
+    expect(decoded).toEqual({ id: "other" });
+    expect(mockedJwt.verify).toHaveBeenCalledWith(invalidToken, "mockSecret");
+  });
+
+  it('should mock jwt.sign correctly', () => {
+    const payload = { id: "user123" };
+    const secret = "mockSecret";
+
+    const token = mockedJwt.sign(payload, secret);
+    expect(token).toBe("token");
+    expect(mockedJwt.sign).toHaveBeenCalledWith(payload, secret);
+  });
+});
+
+
 let mongoServer = new MongoMemoryServer();
 const app = express();
 app.use(express.json());  
 app.use(morgan('tiny')); 
+const VALID_ROUTE_METHODS = ['get', 'post', 'put', 'delete', 'patch']
 
 const postService = new PostService();
 PostRoutes.forEach((route) => {
