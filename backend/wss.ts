@@ -65,8 +65,8 @@ const startWSS = () => {
 
                 // Persist message
                 chatService.addMessage(chatId, message.sender, message.message)
-                .then(() => console.log('Message saved'))
-                .catch(error => console.error('Error saving message:', error));
+                .then(() => { console.log('Message saved'); })
+                .catch((error: unknown )=> { console.error('Error saving message:', error); });
                 
                 // Determine recipient
                 (chatService.getChat(chatId))
@@ -124,7 +124,7 @@ const startWSS = () => {
                 });
 
                 
-            } catch (error) {
+            } catch (error: unknown) {
                 console.error('Message processing error:', error instanceof Error ? error.message : error);
             }
         });
