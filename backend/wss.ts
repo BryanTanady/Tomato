@@ -94,14 +94,14 @@ const startWSS = () => {
     
                         // Broadcast message and handle notifications
                         let recipientFound = false;
-                        wss.clients.forEach(client => {
+                        for(const client of wss.clients) {
                             if (wsRoomMapping.get(client) === chatId && client.readyState === WebSocket.OPEN) {
                                 client.send(JSON.stringify(message));
                                 if (client !== ws) {
                                     recipientFound = true;
                                 }
                             }
-                        });
+                        }
         
                         // Send push notification if recipient offline
                         if (!recipientFound) {
