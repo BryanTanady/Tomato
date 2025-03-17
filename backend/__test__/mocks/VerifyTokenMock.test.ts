@@ -41,7 +41,7 @@ const postController = new PostController();
 app.post('/posts', verifyToken, (req: Request, res: Response, next: NextFunction): void => {
   try{
     postController.createPost(req as AuthenticatedRequest, res)
-    .then(() => next())
+    .then(() => { next(); })
     .catch((err: unknown) => next(err));
   } catch(err) {
     next(err);

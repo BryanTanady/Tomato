@@ -19,7 +19,7 @@ const userService = new UserService();
 app.post('/user/auth',  (req: Request, res: Response, next: NextFunction): void => {
     try {
         userController.handleGoogleSignIn(req, res)
-        .then(() => next())
+        .then(() => { next(); })
         .catch((err: unknown) => next(err));
     } catch (error) {
         next(error);
@@ -28,7 +28,7 @@ app.post('/user/auth',  (req: Request, res: Response, next: NextFunction): void 
 app.get('/user/:id',  (req: Request, res: Response, next: NextFunction): void => {
   try {
       userController.getUser(req, res)
-      .then(() => next())
+      .then(() => { next(); })
       .catch((err: unknown) => next(err));
   } catch (error) {
       next(error);
