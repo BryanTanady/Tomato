@@ -80,7 +80,7 @@ export class RecommendationController {
 
         let best_posts : Post[] = []
         for(let i = 0; i < max; i++) {
-            let place : string = best_places[i]
+            let place : string = best_places[i] as string
             if (!place) {
                 break;
             }
