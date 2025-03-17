@@ -37,7 +37,7 @@ app.use(morgan('tiny'));
 // const userController = new UserController();
 const userService = new UserService();
 UserRoutes.forEach((route) => {
-  const middlewares = (route as Route).protected ? [verifyToken] : [];
+  const middlewares = (route ).protected ? [verifyToken] : [];
 
   (app as any)[route.method](
       route.route,

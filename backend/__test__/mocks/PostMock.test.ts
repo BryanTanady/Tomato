@@ -37,7 +37,7 @@ app.use(morgan('tiny'));
 
 const postService = new PostService();
 PostRoutes.forEach((route) => {
-    const middlewares = (route as Route).protected ? [verifyToken] : []; // Add verifyToken only if protected
+    const middlewares = (route ).protected ? [verifyToken] : []; // Add verifyToken only if protected
 
     (app as any)[route.method](
         route.route,
@@ -182,7 +182,7 @@ describe('Testing getUserPosts', () => {
       .expect(200);
   
     expect(response.body).toBeNull()
-    await spy.mockClear()
+    spy.mockClear()
   });
 
   it('should fail to get all posts if error occurs', async () => {
@@ -249,7 +249,7 @@ describe('Testing getUserPosts', () => {
     expect(response.body[0].latitude).toBe(newPost.latitude);
     expect(response.body[1].latitude).toBe(newPost2.latitude);
     expect(response.body.length).toEqual(2);
-    await spy.mockClear()
+    spy.mockClear()
   });
 })
 
@@ -293,7 +293,7 @@ describe('Testing getEveryPost', () => {
     const response = await postService.getEveryPost();
   
     expect(response).toBeNull()
-    await spy.mockClear()
+    spy.mockClear()
   });
 })
 
@@ -337,7 +337,7 @@ describe('Testing getPostAtLocation', () => {
     const response = await postService.getPostsAtLocation(40.7128, -74.0060, true);
   
     expect(response).toBeNull()
-    await spy.mockClear()
+    spy.mockClear()
   });
 })
 
@@ -389,7 +389,7 @@ describe('Testing getPublicPosts', () => {
       .expect(200);
   
     expect(response.body).toBeNull()
-    await spy.mockClear()
+    spy.mockClear()
   });
 })
 
@@ -423,7 +423,7 @@ describe('Testing updatePost', () => {
       .expect(200);
 
     expect(response.body).toBeNull();
-    await spy.mockClear()
+    spy.mockClear()
   });
 })
 
@@ -454,6 +454,6 @@ describe('Testing deletePost', () => {
       .expect(200);
         
     expect(response.body).toBeNull()
-    await spy.mockClear()
+    spy.mockClear()
   });
 });

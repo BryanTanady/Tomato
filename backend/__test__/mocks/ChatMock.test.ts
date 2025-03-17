@@ -31,7 +31,7 @@ const chatService = new ChatService();
 
 //App routes
 ChatRoutes.forEach((route) => {
-    const middlewares = (route as Route).protected ? [verifyToken] : []; 
+    const middlewares = (route).protected ? [verifyToken] : []; 
 
     (app as any)[route.method](
         route.route,
@@ -162,7 +162,7 @@ describe('Testing getChats', () => {
       .expect(200);
 
     expect(response.body).toBeNull()
-    await spy.mockClear()
+    spy.mockClear()
   });
 })
 
@@ -188,7 +188,7 @@ describe('Testing getChatMessages', () => {
       .expect(200)
 
     expect(response.body).toBeNull();
-    await spy.mockClear()
+    spy.mockClear()
   });
 })
 
@@ -214,7 +214,7 @@ describe('Testing deleteChat', () => {
       .expect(200);
       
     expect(response.body).toBeNull()
-    await spy.mockClear()
+    spy.mockClear()
   });
 })
 
@@ -252,7 +252,7 @@ describe('Testing deleteMessage', () => {
       .expect(200)
 
     expect(response.body).toBeNull()
-    await spy.mockClear()
+    spy.mockClear()
   });
 })
 
@@ -285,6 +285,6 @@ describe('Testing getChat', () => {
     
     const response = await chatService.getChat(chat.body._id);
     expect(response).toBeNull()
-    await spy.mockClear()
+    spy.mockClear()
   });
 })

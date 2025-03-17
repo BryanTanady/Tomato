@@ -254,7 +254,7 @@ describe("Testing createChat", () => {
       member_1: "user123",
     };
 
-    const response = await request(app)
+    await request(app)
       .post('/chats') 
       .send(newChat) 
       .expect(400);
@@ -389,13 +389,12 @@ describe("Testing addMessage", () => {
       message: "hi"
     }
 
-    const main_user = "user123"
     const chat = await request(app)
       .post('/chats') 
       .send(newChat) 
       .expect(200);
 
-    const response = await request(app)
+    await request(app)
       .post(`/chat/${chat.body._id}`) 
       .send(newMessage) 
       .expect(401);
@@ -413,13 +412,12 @@ describe("Testing addMessage", () => {
       message: "hi"
     }
 
-    const main_user = "user123"
     const chat = await request(app)
       .post('/chats') 
       .send(newChat) 
       .expect(200);
 
-    const response = await request(app)
+    await request(app)
       .post(`/chat-no-middleware/${chat.body._id}`) 
       .send(newMessage) 
       .expect(401);
@@ -433,13 +431,12 @@ describe("Testing addMessage", () => {
 
     const newMessage = {}
 
-    const main_user = "user123"
     const chat = await request(app)
       .post('/chats') 
       .send(newChat) 
       .expect(200);
 
-    const response = await request(app)
+    await request(app)
       .post(`/chat/${chat.body._id}`) 
       .send(newMessage) 
       .expect(400);
@@ -484,7 +481,7 @@ describe('Testing deleteMessage', () => {
 
   it('should fail to delete non-existant message', async () => {
     const newId = new mongoose.Types.ObjectId(0)
-    const response = await request(app)
+    await request(app)
       .delete(`/chat/${newId}/messages/${newId}`) 
       .expect(404);
   });
@@ -510,7 +507,7 @@ describe('Testing deleteMessage', () => {
       .send(newMessage) 
       .expect(200);
 
-    const response = await request(app)
+    await request(app)
       .delete(`/chat/${chat.body._id}/messages/${message.body._id}`)
       .expect(401)
   });
@@ -536,7 +533,7 @@ describe('Testing deleteMessage', () => {
       .send(newMessage) 
       .expect(200);
 
-    const response = await request(app)
+    await request(app)
       .delete(`/chat-no-middleware/${chat.body._id}/messages/${message.body._id}`)
       .expect(401)
   });
@@ -565,12 +562,12 @@ describe("Testing getChatMessages", () => {
       .send(newChat) 
       .expect(200);
 
-    const message1 = await request(app)
+    await request(app)
       .post(`/chat/${chat.body._id}`) 
       .send(newMessage) 
       .expect(200);
 
-    const message2 = await request(app)
+    await request(app)
       .post(`/chat/${chat.body._id}`) 
       .send(newMessage_2) 
       .expect(200);
@@ -599,7 +596,7 @@ describe("Testing getChatMessages", () => {
       .send(newChat) 
       .expect(200);
 
-    const response = await request(app)
+    await request(app)
       .get(`/chats/${chat.body._id}`)
       .expect(401)
   });
@@ -615,7 +612,7 @@ describe("Testing getChatMessages", () => {
       .send(newChat) 
       .expect(200);
 
-    const response = await request(app)
+    await request(app)
       .get(`/chats-no-middleware/${chat.body._id}`)
       .expect(401)
   });
@@ -633,7 +630,7 @@ describe("Testing getChatMessages", () => {
 
     const newId = new mongoose.Types.ObjectId(0)
 
-    const response = await request(app)
+    await request(app)
       .get(`/chats/${newId}`)
       .expect(404)
   });
@@ -664,7 +661,7 @@ describe("Testing deleteChats", () => {
 
   it('should fail to delete non-existant chat', async () => {
     const newId = new mongoose.Types.ObjectId(0)
-    const response = await request(app)
+    await request(app)
       .delete(`/chats/${newId}`) 
       .expect(404);
   });
@@ -680,7 +677,7 @@ describe("Testing deleteChats", () => {
       .send(newChat) 
       .expect(200);
 
-    const response = await request(app)
+    await request(app)
       .delete(`/chats-no-middleware/${chat.body._id}`) 
       .expect(401);
   });
@@ -696,7 +693,7 @@ describe("Testing deleteChats", () => {
       .send(newChat) 
       .expect(200);
 
-    const response = await request(app)
+    await request(app)
       .delete(`/chats/${chat.body._id}`) 
       .expect(401);
   });

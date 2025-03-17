@@ -25,7 +25,7 @@ const middleware = (req: AuthenticatedRequest, res: Request, next: NextFunction)
   next();
 }
 RecommendationRoutes.forEach((route) => {
-  const middlewares = (route as Route).protected ? [middleware] : []; // Add verifyToken only if protected
+  const middlewares = (route ).protected ? [middleware] : []; // Add verifyToken only if protected
 
   (app as any)[route.method](
       route.route,
