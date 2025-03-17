@@ -88,7 +88,7 @@ export class PostController {
 
         catch(err){
             if(err instanceof MissingCoordinateException){
-                console.log("User Provided Invalid coordinate: ", err)
+                console.error("User Provided Invalid coordinate: ", err)
                 res.status(400).json({ message: "Incomplete coordinate" });
                 return
             }

@@ -34,7 +34,7 @@ const startWSS = () => {
     const wsRoomMapping = new Map<WebSocket, string>();
 
     wss.on('listening', () => {
-        console.log(`WebSocket server running on ws://localhost:${wssPort}`);
+        console.warn(`WebSocket server running on ws://localhost:${wssPort}`);
     });
 
     wss.on('connection', (ws, req) => {
