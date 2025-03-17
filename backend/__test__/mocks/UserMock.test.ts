@@ -84,7 +84,7 @@ describe('Testing handleGoogleSignIn', () => {
       firebaseToken: "user12345"
     };
 
-    const user = await userService.createUser(newUser._id, newUser.username, newUser.firebaseToken)
+    await userService.createUser(newUser._id, newUser.username, newUser.firebaseToken)
     const response = await request(app)
         .post(`/user/auth`)
         .send({

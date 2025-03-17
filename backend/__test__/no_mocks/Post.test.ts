@@ -16,16 +16,20 @@ const postController = new PostController();
 app.get('/posts-authenticated', (req : Request, res : Response, next : NextFunction) => {
   (req as any).user = { id: 'user123' }; 
   next();
-}, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+},  (req: Request, res: Response, next: NextFunction): void => {
   try {
-      await postController.getAuthenticatedUserPost(req as AuthenticatedRequest, res);
+      postController.getAuthenticatedUserPost(req as AuthenticatedRequest, res)
+      .then(() => next())
+      .catch((err) => next(err));
   } catch (error) {
       next(error);
   }
 }); 
-app.get('/posts-authenticated-not', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+app.get('/posts-authenticated-not',  (req: Request, res: Response, next: NextFunction): void => {
   try {
-      await postController.getAuthenticatedUserPost(req as AuthenticatedRequest, res);
+      postController.getAuthenticatedUserPost(req as AuthenticatedRequest, res)
+      .then(() => next())
+      .catch((err) => next(err));
   } catch (error) {
       next(error);
   }
@@ -34,24 +38,30 @@ app.get('/posts-authenticated-not', async (req: Request, res: Response, next: Ne
 app.post('/posts', (req, res, next) => {
   (req as any).user = { id: 'user123' };
   next();
-}, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+},  (req: Request, res: Response, next: NextFunction): void => {
   try{
-    await postController.createPost(req as AuthenticatedRequest, res);
+    postController.createPost(req as AuthenticatedRequest, res)
+    .then(() => next())
+    .catch((err) => next(err));
   } catch(err) {
     next(err);
   }});
-app.post('/posts-not-authenticated', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+app.post('/posts-not-authenticated',  (req: Request, res: Response, next: NextFunction): void => {
   try{
-    await postController.createPost(req as AuthenticatedRequest, res);
+    postController.createPost(req as AuthenticatedRequest, res)
+    .then(() => next())
+    .catch((err) => next(err));
   } catch(err) {
     next(err);
   }});
 app.post('/posts-from-other', (req, res, next) => {
   (req as AuthenticatedRequest).user = { id: 'other' };
   next();
-}, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+},  (req: Request, res: Response, next: NextFunction): void => {
   try{
-    await postController.createPost(req as AuthenticatedRequest, res);
+    postController.createPost(req as AuthenticatedRequest, res)
+    .then(() => next())
+    .catch((err) => next(err));
   } catch(err) {
     next(err);
   }}); 
@@ -60,36 +70,46 @@ app.get('/posts/:id', postController.getPostById);
 app.put('/posts/:id', (req, res, next) => {
   (req as any).user = { id: 'user123' }; 
   next();
-}, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+},  (req: Request, res: Response, next: NextFunction): void => {
   try{
-    await postController.updatePost(req as AuthenticatedRequest, res);
+    postController.updatePost(req as AuthenticatedRequest, res)
+    .then(() => next())
+    .catch((err) => next(err));
   } catch(err) {
     next(err);
   }});  
-app.put('/posts-not-auth/:id', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+app.put('/posts-not-auth/:id',  (req: Request, res: Response, next: NextFunction): void => {
   try{
-    await postController.updatePost(req as AuthenticatedRequest, res);
+    postController.updatePost(req as AuthenticatedRequest, res)
+    .then(() => next())
+    .catch((err) => next(err));
   } catch(err) {
     next(err);
   }});    
 app.delete('/posts/:id', (req, res, next) => {
   (req as any).user = { id: 'user123' }; 
   next();
-}, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+},  (req: Request, res: Response, next: NextFunction): void => {
   try{
-    await postController.deletePost(req as AuthenticatedRequest, res);
+    postController.deletePost(req as AuthenticatedRequest, res)
+    .then(() => next())
+    .catch((err) => next(err));
   } catch(err) {
     next(err);
   }});
-app.delete('/posts-not-auth/:id', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+app.delete('/posts-not-auth/:id',  (req: Request, res: Response, next: NextFunction): void => {
   try{
-    await postController.deletePost(req as AuthenticatedRequest, res);
+    postController.deletePost(req as AuthenticatedRequest, res)
+    .then(() => next())
+    .catch((err) => next(err));
   } catch(err) {
     next(err);
   }});  
-app.get('/posts',  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+app.get('/posts',   (req: Request, res: Response, next: NextFunction): void => {
   try {
-      await postController.getPublicPost(req, res);
+      postController.getPublicPost(req, res)
+      .then(() => next())
+      .catch((err) => next(err));
   } catch (error) {
       next(error);
   }
@@ -374,22 +394,22 @@ describe('Testing getUserPosts', () => {
       isPrivate: true,
     };
 
-    const createdPost = await request(app)
+    await request(app)
       .post('/posts')
       .send(newPost)
       .expect(200);
     
-    const anotherPost = await request(app)
+    await request(app)
       .post('/posts')
       .send(newPost2)
       .expect(200);
 
-    const thirdpost = await request(app)
+    await request(app)
       .post('/posts-from-other')
       .send(newPost3)
       .expect(200);
 
-    const fourth = await request(app)
+    await request(app)
       .post('/posts-from-other')
       .send(newPost4)
       .expect(200);

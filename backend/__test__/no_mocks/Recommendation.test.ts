@@ -1624,8 +1624,6 @@ describe('Testing getRecommendations', () => {
     const else_ = [newPost19, newPost20, newPost21, newPost22, newPost23, newPost24]
     const fourth = [newPost25, newPost26, newPost27, newPost28, newPost29, newPost30]
 
-    const main_user = "user123"
-
     for (let i = 0; i < 6; i++) {
       await request(app)
         .post('/posts') 

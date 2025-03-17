@@ -38,9 +38,11 @@ app.use(morgan('tiny'));
 
 const postController = new PostController();
 
-app.post('/posts', verifyToken, async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+app.post('/posts', verifyToken, (req: Request, res: Response, next: NextFunction): void => {
   try{
-    await postController.createPost(req as AuthenticatedRequest, res);
+    postController.createPost(req as AuthenticatedRequest, res)
+    .then(() => next())
+    .catch((err) => next(err));
   } catch(err) {
     next(err);
   }}); 

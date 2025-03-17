@@ -30,9 +30,9 @@ app.use(express.json());
 app.use(morgan('tiny')); 
 
 const userController = new UserController();
-app.post('/user-faulty/auth', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+app.post('/user-faulty/auth',  (req: Request, res: Response, next: NextFunction): void => {
     try {
-        await userController.handleGoogleSignIn(req, res);
+        userController.handleGoogleSignIn(req, res);
     } catch (error) {
         next(error);
     }});  

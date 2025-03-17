@@ -24,24 +24,24 @@ const chatService = new ChatService();
 app.post('/chats', (req, res, next) => {
   (req as AuthenticatedRequest).user = { id: 'user123' };
   next();
-}, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+},  (req: Request, res: Response, next: NextFunction): void => {
   try{
-    await chatController.createChat(req as AuthenticatedRequest, res);
+    chatController.createChat(req as AuthenticatedRequest, res);
   } catch(err) {
     next(err);
   }}); 
 app.post('/chats-string', (req, res, next) => {
   (req as AuthenticatedRequest).user = { id: 'string' }; 
   next();
-}, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+},  (req: Request, res: Response, next: NextFunction): void => {
   try{
-    await chatController.createChat(req as AuthenticatedRequest, res);
+    chatController.createChat(req as AuthenticatedRequest, res);
   } catch(err) {
     next(err);
   }}); 
-app.post('/chats-no-middleware', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+app.post('/chats-no-middleware',  (req: Request, res: Response, next: NextFunction): void => {
   try{
-    await chatController.createChat(req as AuthenticatedRequest, res);
+    chatController.createChat(req as AuthenticatedRequest, res);
   } catch(err) {
     next(err);
   }});
@@ -49,15 +49,15 @@ app.post('/chats-no-middleware', async (req: Request, res: Response, next: NextF
 app.get('/chats/:id', (req, res, next) => {
     (req as any).user = { id: 'user123' }; 
     next();
-  }, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  },  (req: Request, res: Response, next: NextFunction): void => {
     try{
-      await chatController.getChatMessages(req as AuthenticatedRequest, res);
+      chatController.getChatMessages(req as AuthenticatedRequest, res);
     } catch(err) {
       next(err);
     }});  
-app.get('/chats-no-middleware/:id', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+app.get('/chats-no-middleware/:id',  (req: Request, res: Response, next: NextFunction): void => {
   try{
-    await chatController.getChatMessages(req as AuthenticatedRequest, res);
+    chatController.getChatMessages(req as AuthenticatedRequest, res);
   } catch(err) {
     next(err);
   }});  
@@ -66,15 +66,15 @@ app.get('/chats-no-middleware/:id', async (req: Request, res: Response, next: Ne
 app.get('/chats', (req, res, next) => {
     (req as any).user = { id: 'user123' }; 
     next();
-  },async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  }, (req: Request, res: Response, next: NextFunction): void => {
     try{
-      await chatController.getChats(req as AuthenticatedRequest, res);
+      chatController.getChats(req as AuthenticatedRequest, res);
     } catch(err) {
       next(err);
     }});  
-app.get('/chats-unauthorized', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+app.get('/chats-unauthorized',  (req: Request, res: Response, next: NextFunction): void => {
   try{
-    await chatController.getChats(req as AuthenticatedRequest, res);
+    chatController.getChats(req as AuthenticatedRequest, res);
   } catch(err) {
     next(err);
   }});  
@@ -83,24 +83,24 @@ app.get('/chats-unauthorized', async (req: Request, res: Response, next: NextFun
 app.post('/chat/:id', (req, res, next) => {
     (req as any).user = { id: 'user123' }; 
     next();
-  },async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  }, (req: Request, res: Response, next: NextFunction): void => {
     try{
-      await chatController.addMessage(req as AuthenticatedRequest, res);
+      chatController.addMessage(req as AuthenticatedRequest, res);
     } catch(err) {
       next(err);
     }});
 app.post('/chat-string/:id', (req, res, next) => {
     (req as any).user = { id: 'string' }; 
     next();
-  }, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  },  (req: Request, res: Response, next: NextFunction): void => {
     try{
-      await chatController.addMessage(req as AuthenticatedRequest, res);
+      chatController.addMessage(req as AuthenticatedRequest, res);
     } catch(err) {
       next(err);
     }});
-app.post('/chat-no-middleware/:id', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+app.post('/chat-no-middleware/:id',  (req: Request, res: Response, next: NextFunction): void => {
   try{
-    await chatController.addMessage(req as AuthenticatedRequest, res);
+    chatController.addMessage(req as AuthenticatedRequest, res);
   } catch(err) {
     next(err);
   }});
@@ -109,15 +109,15 @@ app.post('/chat-no-middleware/:id', async (req: Request, res: Response, next: Ne
 app.delete('/chats/:id', (req, res, next) => {
     (req as any).user = { id: 'user123' }; 
     next();
-  }, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  },  (req: Request, res: Response, next: NextFunction): void => {
     try{
-      await chatController.deleteChat(req as AuthenticatedRequest, res);
+      chatController.deleteChat(req as AuthenticatedRequest, res);
     } catch(err) {
       next(err);
     }});
-app.delete('/chats-no-middleware/:id', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+app.delete('/chats-no-middleware/:id',  (req: Request, res: Response, next: NextFunction): void => {
   try{
-    await chatController.deleteChat(req as AuthenticatedRequest, res);
+    chatController.deleteChat(req as AuthenticatedRequest, res);
   } catch(err) {
     next(err);
   }});
@@ -126,15 +126,15 @@ app.delete('/chats-no-middleware/:id', async (req: Request, res: Response, next:
 app.delete('/chat/:id/messages/:message_id', (req, res, next) => {
     (req as any).user = { id: 'user123' }; 
     next();
-  }, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  },  (req: Request, res: Response, next: NextFunction): void => {
     try{
-      await chatController.deleteMessage(req as AuthenticatedRequest, res);
+      chatController.deleteMessage(req as AuthenticatedRequest, res);
     } catch(err) {
       next(err);
     }});
-app.delete('/chat-no-middleware/:id/messages/:message_id', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+app.delete('/chat-no-middleware/:id/messages/:message_id',  (req: Request, res: Response, next: NextFunction): void => {
   try{
-    await chatController.deleteMessage(req as AuthenticatedRequest, res);
+    chatController.deleteMessage(req as AuthenticatedRequest, res);
   } catch(err) {
     next(err);
   }});
@@ -192,7 +192,7 @@ describe("Testing createChat", () => {
       member_2: "user123"
     };
 
-    const response = await request(app)
+    await request(app)
       .post('/chats-no-middleware') 
       .send(newChat) 
       .expect(401);

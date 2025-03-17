@@ -277,13 +277,13 @@ describe('Testing getEveryPost', () => {
       isPrivate: false,
     };
   
-    const createdPost = await request(app)
+    await request(app)
       .post('/posts')
       .send(newPost)
       .set('Authorization', 'Bearer 90909090')
       .expect(200);
       
-    const anotherPost = await request(app)
+    await request(app)
       .post('/posts')
       .send(newPost2)
       .set('Authorization', 'Bearer 90909090')

@@ -16,16 +16,16 @@ app.use(morgan('tiny'));
 const userController = new UserController();
 const userService = new UserService();
 
-app.post('/user/auth', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+app.post('/user/auth',  (req: Request, res: Response, next: NextFunction): void => {
     try {
-        await userController.handleGoogleSignIn(req, res);
+        userController.handleGoogleSignIn(req, res);
     } catch (error) {
         next(error);
     }}); 
 
-app.get('/user/:id', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+app.get('/user/:id',  (req: Request, res: Response, next: NextFunction): void => {
   try {
-      await userController.getUser(req, res);
+      userController.getUser(req, res);
   } catch (error) {
       next(error);
   }}); 
@@ -53,7 +53,7 @@ describe('Testing getUser', () => {
       firebaseToken: "user12345"
     };
 
-    await userService.createUser(newUser._id, newUser.username, newUser.firebaseToken)
+    userService.createUser(newUser._id, newUser.username, newUser.firebaseToken)
     const response = await request(app)
         .get(`/user/${newUser._id}`)
         .expect(200)
@@ -71,7 +71,7 @@ describe('Testing getUser', () => {
       firebaseToken: "user12345"
     };
 
-    await userService.createUser(newUser._id, newUser.username, newUser.firebaseToken)
+    userService.createUser(newUser._id, newUser.username, newUser.firebaseToken)
     const response = await request(app)
         .get(`/user/4321`)
         .expect(200)
