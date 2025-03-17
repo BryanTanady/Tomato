@@ -17,7 +17,7 @@ jest.mock('jsonwebtoken', () => {
     ...actualJwt,  // Spread the actual module's methods and properties
     verify: jest.fn().mockReturnValue({ id: "user123" } as jwt.JwtPayload),  // Mock verify
     sign: jest.fn().mockReturnValue("token" as string)  // Mock sign
-  };
+  } as typeof jwt;  // Cast the object to the type of jwt
 });
 
 
