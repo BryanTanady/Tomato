@@ -20,7 +20,7 @@ app.get('/posts-authenticated', (req : Request, res : Response, next : NextFunct
   try {
       postController.getAuthenticatedUserPost(req as AuthenticatedRequest, res)
       .then(() => { next(); })
-      .catch((err: unknown) => next(err));
+     .catch((err: unknown) => { next(err); });
   } catch (error) {
       next(error);
   }
@@ -29,7 +29,7 @@ app.get('/posts-authenticated-not',  (req: Request, res: Response, next: NextFun
   try {
       postController.getAuthenticatedUserPost(req as AuthenticatedRequest, res)
       .then(() => { next(); })
-      .catch((err: unknown) => next(err));
+     .catch((err: unknown) => { next(err); });
   } catch (error) {
       next(error);
   }
@@ -42,7 +42,7 @@ app.post('/posts', (req, res, next) => {
   try{
     postController.createPost(req as AuthenticatedRequest, res)
     .then(() => { next(); })
-    .catch((err: unknown) => next(err));
+   .catch((err: unknown) => { next(err); });
   } catch(err) {
     next(err);
   }});
@@ -50,7 +50,7 @@ app.post('/posts-not-authenticated',  (req: Request, res: Response, next: NextFu
   try{
     postController.createPost(req as AuthenticatedRequest, res)
     .then(() => { next(); })
-    .catch((err: unknown) => next(err));
+   .catch((err: unknown) => { next(err); });
   } catch(err) {
     next(err);
   }});
@@ -61,7 +61,7 @@ app.post('/posts-from-other', (req, res, next) => {
   try{
     postController.createPost(req as AuthenticatedRequest, res)
     .then(() => { next(); })
-    .catch((err: unknown) => next(err));
+   .catch((err: unknown) => { next(err); });
   } catch(err) {
     next(err);
   }}); 
@@ -74,7 +74,7 @@ app.put('/posts/:id', (req, res, next) => {
   try{
     postController.updatePost(req as AuthenticatedRequest, res)
     .then(() => { next(); })
-    .catch((err: unknown) => next(err));
+   .catch((err: unknown) => { next(err); });
   } catch(err) {
     next(err);
   }});  
@@ -82,7 +82,7 @@ app.put('/posts-not-auth/:id',  (req: Request, res: Response, next: NextFunction
   try{
     postController.updatePost(req as AuthenticatedRequest, res)
     .then(() => { next(); })
-    .catch((err: unknown) => next(err));
+   .catch((err: unknown) => { next(err); });
   } catch(err) {
     next(err);
   }});    
@@ -93,7 +93,7 @@ app.delete('/posts/:id', (req, res, next) => {
   try{
     postController.deletePost(req as AuthenticatedRequest, res)
     .then(() => { next(); })
-    .catch((err: unknown) => next(err));
+   .catch((err: unknown) => { next(err); });
   } catch(err) {
     next(err);
   }});
@@ -101,7 +101,7 @@ app.delete('/posts-not-auth/:id',  (req: Request, res: Response, next: NextFunct
   try{
     postController.deletePost(req as AuthenticatedRequest, res)
     .then(() => { next(); })
-    .catch((err: unknown) => next(err));
+   .catch((err: unknown) => { next(err); });
   } catch(err) {
     next(err);
   }});  
@@ -109,7 +109,7 @@ app.get('/posts',   (req: Request, res: Response, next: NextFunction): void => {
   try {
       postController.getPublicPost(req, res)
       .then(() => { next(); })
-      .catch((err: unknown) => next(err));
+     .catch((err: unknown) => { next(err); });
   } catch (error) {
       next(error);
   }

@@ -28,7 +28,7 @@ app.post('/chats', (req, res, next) => {
   try{
     chatController.createChat(req as AuthenticatedRequest, res)
     .then(() => { next(); })
-    .catch((err: unknown) => next(err));
+   .catch((err: unknown) => { next(err); });
   } catch(err) {
     next(err);
   }}); 
@@ -39,7 +39,7 @@ app.post('/chats-string', (req, res, next) => {
   try{
     chatController.createChat(req as AuthenticatedRequest, res)
     .then(() => { next(); })
-    .catch((err: unknown) => next(err));
+   .catch((err: unknown) => { next(err); });
   } catch(err) {
     next(err);
   }}); 
@@ -47,7 +47,7 @@ app.post('/chats-no-middleware',  (req: Request, res: Response, next: NextFuncti
   try{
     chatController.createChat(req as AuthenticatedRequest, res)
     .then(() => { next(); })
-    .catch((err: unknown) => next(err));
+   .catch((err: unknown) => { next(err); });
   } catch(err) {
     next(err);
   }});
@@ -59,7 +59,7 @@ app.get('/chats/:id', (req, res, next) => {
     try{
       chatController.getChatMessages(req as AuthenticatedRequest, res)
       .then(() => { next(); })
-      .catch((err: unknown) => next(err));
+     .catch((err: unknown) => { next(err); });
     } catch(err) {
       next(err);
     }});  
@@ -67,7 +67,7 @@ app.get('/chats-no-middleware/:id',  (req: Request, res: Response, next: NextFun
   try{
     chatController.getChatMessages(req as AuthenticatedRequest, res)
     .then(() => { next(); })
-    .catch((err: unknown) => next(err));
+   .catch((err: unknown) => { next(err); });
   } catch(err) {
     next(err);
   }});  
@@ -80,7 +80,7 @@ app.get('/chats', (req, res, next) => {
     try{
       chatController.getChats(req as AuthenticatedRequest, res)
       .then(() => { next(); })
-      .catch((err: unknown) => next(err));
+     .catch((err: unknown) => { next(err); });
     } catch(err) {
       next(err);
     }});  
@@ -88,7 +88,7 @@ app.get('/chats-unauthorized',  (req: Request, res: Response, next: NextFunction
   try{
     chatController.getChats(req as AuthenticatedRequest, res)
     .then(() => { next(); })
-    .catch((err: unknown) => next(err));
+   .catch((err: unknown) => { next(err); });
   } catch(err) {
     next(err);
   }});  
@@ -101,7 +101,7 @@ app.post('/chat/:id', (req, res, next) => {
     try{
       chatController.addMessage(req as AuthenticatedRequest, res)
       .then(() => { next(); })
-      .catch((err: unknown) => next(err));
+     .catch((err: unknown) => { next(err); });
     } catch(err) {
       next(err);
     }});
@@ -112,7 +112,7 @@ app.post('/chat-string/:id', (req, res, next) => {
     try{
       chatController.addMessage(req as AuthenticatedRequest, res)
       .then(() => { next(); })
-      .catch((err: unknown) => next(err));
+     .catch((err: unknown) => { next(err); });
     } catch(err) {
       next(err);
     }});
@@ -120,7 +120,7 @@ app.post('/chat-no-middleware/:id',  (req: Request, res: Response, next: NextFun
   try{
     chatController.addMessage(req as AuthenticatedRequest, res)
     .then(() => { next(); })
-    .catch((err: unknown) => next(err));
+   .catch((err: unknown) => { next(err); });
   } catch(err) {
     next(err);
   }});
@@ -133,7 +133,7 @@ app.delete('/chats/:id', (req, res, next) => {
     try{
       chatController.deleteChat(req as AuthenticatedRequest, res)
       .then(() => { next(); })
-      .catch((err: unknown) => next(err));
+     .catch((err: unknown) => { next(err); });
     } catch(err) {
       next(err);
     }});
@@ -141,7 +141,7 @@ app.delete('/chats-no-middleware/:id',  (req: Request, res: Response, next: Next
   try{
     chatController.deleteChat(req as AuthenticatedRequest, res)
     .then(() => { next(); })
-    .catch((err: unknown) => next(err));
+   .catch((err: unknown) => { next(err); });
   } catch(err) {
     next(err);
   }});
@@ -154,7 +154,7 @@ app.delete('/chat/:id/messages/:message_id', (req, res, next) => {
     try{
       chatController.deleteMessage(req as AuthenticatedRequest, res)
       .then(() => { next(); })
-      .catch((err: unknown) => next(err));
+     .catch((err: unknown) => { next(err); });
     } catch(err) {
       next(err);
     }});
@@ -162,7 +162,7 @@ app.delete('/chat-no-middleware/:id/messages/:message_id',  (req: Request, res: 
   try{
     chatController.deleteMessage(req as AuthenticatedRequest, res)
     .then(() => { next(); })
-    .catch((err: unknown) => next(err));
+   .catch((err: unknown) => { next(err); });
   } catch(err) {
     next(err);
   }});
