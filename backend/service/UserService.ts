@@ -62,7 +62,7 @@ export class UserService {
         let user: IUser|null = await this.getUser(payload.sub as string);
     
         if (!user) {
-            user = await this.createUser(payload.sub, payload.name, firebaseToken);
+            user = await this.createUser(payload.sub as string, payload.name as string, firebaseToken as string);
         } else {
             if (!user.firebaseToken.includes(firebaseToken)) {
                 user.firebaseToken.push(firebaseToken);

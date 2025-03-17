@@ -26,7 +26,7 @@ export class ChatController {
             res.status(401).send({message: "Unauthorized"});
             return;
         }
-        res.json(await this.chatService.createChat(chat.member_1, chat.member_2))
+        res.json(await this.chatService.createChat(chat.member_1 as string, chat.member_2 as string))
     }
 
     getChats = async (req: Request, res: Response): Promise<void> => {

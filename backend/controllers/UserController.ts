@@ -25,7 +25,7 @@ export class UserController {
                 return
             }
 
-            const result = await this.userService.signInWithGoogle(googleToken, firebaseToken); //TODO: Not just google now, need better naming
+            const result = await this.userService.signInWithGoogle(googleToken as string, firebaseToken as string); //TODO: Not just google now, need better naming
             res.status(200).json(result)
             return
 

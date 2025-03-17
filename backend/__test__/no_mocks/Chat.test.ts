@@ -343,7 +343,7 @@ describe("Testing getChat", () => {
       .send(newChat_2) 
       .expect(200);
 
-    const response = await chatService.getChat(chat.body._id);
+    const response = await chatService.getChat(chat.body._id as string);
     expect(response).toHaveProperty('_id'); 
     expect([response?.member_1, response?.member_2]).toContain(main_user); 
     expect([response?.member_1, response?.member_2]).toContain(main_user);
