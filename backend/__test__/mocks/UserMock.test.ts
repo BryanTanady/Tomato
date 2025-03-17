@@ -11,14 +11,15 @@ import { validationResult } from 'express-validator';
 import { JwtPayload } from 'jsonwebtoken';
 
 
+// Explicitly type the mock to prevent TypeScript from inferring `any`
 jest.mock('jsonwebtoken', () => {
   const actualJwt = jest.requireActual<typeof import('jsonwebtoken')>('jsonwebtoken');
 
   return {
     ...actualJwt,
     verify: jest.fn().mockReturnValue({ id: "user123" } as JwtPayload), 
-    sign: jest.fn().mockReturnValue("token" as string)
-  };
+    sign: jest.fn().mockReturnValue("token" as string),
+  } as typeof import('jsonwebtoken'); // Ensure the return value matches the original `jsonwebtoken` type
 });
 
 jest.mock("google-auth-library", () => {
