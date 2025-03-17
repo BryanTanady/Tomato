@@ -38,8 +38,8 @@ app.use(morgan('tiny'));
 const postService = new PostService();
 PostRoutes.forEach((route) => {
     const middlewares = (route ).protected ? [verifyToken] : []; // Add verifyToken only if protected
-
-    (app as any)[route.method](
+  const method = route.method as keyof express.Application;
+    app[method](
         route.route,
         ...middlewares,
         route.validation,

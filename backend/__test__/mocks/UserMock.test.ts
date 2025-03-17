@@ -38,8 +38,8 @@ app.use(morgan('tiny'));
 const userService = new UserService();
 UserRoutes.forEach((route) => {
   const middlewares = (route ).protected ? [verifyToken] : [];
-
-  (app as any)[route.method](
+  const method = route.method as keyof express.Application;
+  app[method](
       route.route,
       ...middlewares,
       route.validation,

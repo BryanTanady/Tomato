@@ -32,8 +32,8 @@ const chatService = new ChatService();
 //App routes
 ChatRoutes.forEach((route) => {
     const middlewares = (route).protected ? [verifyToken] : []; 
-
-    (app as any)[route.method](
+    const method = route.method as keyof express.Application;
+    app[method](
         route.route,
         ...middlewares,
         route.validation,
