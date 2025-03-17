@@ -90,7 +90,7 @@ const startWSS = () => {
                         if (!receiverInfo) {
                             throw new Error('Recipient not found');
                         }
-                        const receiverTokens = receiverInfo?.firebaseToken ?? [];
+                        const receiverTokens = receiverInfo?.firebaseToken;
     
                         // Broadcast message and handle notifications
                         let recipientFound = false;
@@ -115,6 +115,10 @@ const startWSS = () => {
                         }
 
                     })
+                    .catch(error => {
+                        console.error('Error fetching recipient:', error);
+                        return null;
+                    });
                     
                    
                 })

@@ -70,6 +70,7 @@ app.post('/posts-from-other', (req, res, next) => {
   let getPostWrapper = (req: Request, res: Response): void => {
     postController.getPostById(req as AuthenticatedRequest, res)
     .then(() => { return; })
+    .catch((err: unknown) => { console.error(err); });
   }
 app.get('/posts/:id', getPostWrapper);  
 
