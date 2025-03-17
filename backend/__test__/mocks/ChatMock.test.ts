@@ -77,7 +77,7 @@ afterEach(() => {
 
 describe('Testing addMessage', () => {
   it('should fail to add a message if an error occurs', async () => {
-    let spy = await jest.spyOn(MessageModel.prototype, "save").mockImplementation(() => {
+    let spy = jest.spyOn(MessageModel.prototype, "save").mockImplementation(() => {
       throw new Error("Database error 1")
     })
     const newChat = {
@@ -167,7 +167,7 @@ describe('Testing getChats', () => {
 
 describe('Testing getChatMessages', () => {
   it('should fail to get messages if error occurs', async () => {
-    let spy = await jest.spyOn(MessageModel, "find").mockImplementation(() => {
+    let spy = jest.spyOn(MessageModel, "find").mockImplementation(() => {
       throw new Error("Database error 4")
     })
     const newChat = {
@@ -193,7 +193,7 @@ describe('Testing getChatMessages', () => {
 
 describe('Testing deleteChat', () => {
   it('should fail to delete chat if error occurs', async () => {
-    let spy = await jest.spyOn(ChatModel, "deleteOne").mockImplementation(() => {
+    let spy = jest.spyOn(ChatModel, "deleteOne").mockImplementation(() => {
       throw new Error("Database error 5")
     })
     const newChat = {
@@ -219,7 +219,7 @@ describe('Testing deleteChat', () => {
 
 describe('Testing deleteMessage', () => {
   it('should fail to delete message if error occurs', async () => {
-    let spy = await jest.spyOn(MessageModel.prototype, "deleteOne").mockImplementation(() => {
+    let spy = jest.spyOn(MessageModel.prototype, "deleteOne").mockImplementation(() => {
       throw new Error("Database error 6")
     })
 
@@ -257,7 +257,7 @@ describe('Testing deleteMessage', () => {
 
 describe('Testing getChat', () => {
   it('should fail to get chat by id if error occurs', async () => {
-    let spy = await jest.spyOn(ChatModel, "findById").mockImplementation(() => {
+    let spy = jest.spyOn(ChatModel, "findById").mockImplementation(() => {
       throw new Error("Database error 6")
     })
     const newChat = {

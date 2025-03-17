@@ -77,7 +77,7 @@ beforeEach(async () => {
 
 describe('Testing createPost', () => {
   it('should fail to create a post if an error occurs', async () => {
-    let spy = await jest.spyOn(PostModel.prototype, "save").mockImplementation(() => {
+    let spy = jest.spyOn(PostModel.prototype, "save").mockImplementation(() => {
       throw new Error("Database Error 1")
     })
     const newPost = {
@@ -133,7 +133,7 @@ describe('Testing getPostById', () => {
 
 describe('Testing getUserPosts', () => {
   it('should fail to get authenticated posts if error occurs', async () => {
-    let spy = await jest.spyOn(PostModel, "find").mockImplementation(() => {
+    let spy = jest.spyOn(PostModel, "find").mockImplementation(() => {
       throw new Error("Database Error 3")
     })
     const newPost = {
@@ -185,7 +185,7 @@ describe('Testing getUserPosts', () => {
   });
 
   it('should fail to get all posts if error occurs', async () => {
-    let spy = await jest.spyOn(PostService.prototype, "getPosts").mockImplementation(() => {
+    let spy = jest.spyOn(PostService.prototype, "getPosts").mockImplementation(() => {
       throw new Error("Database Error 9");
     })
     const newPost = {
@@ -254,7 +254,7 @@ describe('Testing getUserPosts', () => {
 
 describe('Testing getEveryPost', () => {
   it('should fail to get every post if error occurs', async () => {
-    let spy = await jest.spyOn(PostModel, "find").mockImplementation(() => {
+    let spy = jest.spyOn(PostModel, "find").mockImplementation(() => {
       throw new Error("Database Error 7")
     })
     const newPost = {
@@ -298,7 +298,7 @@ describe('Testing getEveryPost', () => {
 
 describe('Testing getPostAtLocation', () => {
   it('should fail to get post at location if error occurs', async () => {
-    let spy = await jest.spyOn(PostModel, "find").mockImplementation(() => {
+    let spy = jest.spyOn(PostModel, "find").mockImplementation(() => {
       throw new Error("Database Error 8")
     })
     const newPost = {
@@ -342,7 +342,7 @@ describe('Testing getPostAtLocation', () => {
 
 describe('Testing getPublicPosts', () => {
   it('should fail to get public posts in range if error occurs', async () => {
-    let spy = await jest.spyOn(PostModel, "find").mockImplementation(() => {
+    let spy = jest.spyOn(PostModel, "find").mockImplementation(() => {
       throw new Error("Database Error 4")
     })
     const newPost = {
@@ -394,7 +394,7 @@ describe('Testing getPublicPosts', () => {
 
 describe('Testing updatePost', () => {
   it('should fail to update a post if error occurs', async () => {
-    let spy = await jest.spyOn(PostModel, "findByIdAndUpdate").mockImplementation(() => {
+    let spy = jest.spyOn(PostModel, "findByIdAndUpdate").mockImplementation(() => {
       throw new Error("Database Error 5")
     })
     const newPost = {
@@ -428,7 +428,7 @@ describe('Testing updatePost', () => {
 
 describe('Testing deletePost', () => {
   it('should fail to delete a post if error occurs', async () => {
-    let spy = await jest.spyOn(PostModel, "findOneAndDelete").mockImplementation(() => {
+    let spy = jest.spyOn(PostModel, "findOneAndDelete").mockImplementation(() => {
       throw new Error("Database Error 6")
     })
     const newPost = {
