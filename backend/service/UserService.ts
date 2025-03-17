@@ -62,11 +62,11 @@ export class UserService {
         let user: IUser|null = await this.getUser(payload.sub as string);
     
         if (!user) {
-            user = await this.createUser(payload.sub as string, payload.name as string, firebaseToken as string);
+            user = await this.createUser(payload.sub as string, payload.name as string, firebaseToken);
         } else {
             if (!user.firebaseToken.includes(firebaseToken)) {
                 user.firebaseToken.push(firebaseToken);
-                user.updateOne(); //TODO: Need to invalidate the token when user sign out
+                await user.updateOne(); //TODO: Need to invalidate the token when user sign out
             }            
         } 
         
