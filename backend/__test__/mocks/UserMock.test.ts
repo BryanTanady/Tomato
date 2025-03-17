@@ -8,13 +8,17 @@ import { UserService } from '../../service/UserService';
 import { UserRoutes } from '../../routes/UserRoutes';
 import {verifyToken} from '../../middleware/verifyToken';
 import { validationResult } from 'express-validator';
-import * as jwt from 'jsonwebtoken';  // Import the module only once
+import * as jwt from 'jsonwebtoken'; 
 
-jest.mock('jsonwebtoken', () => ({
-  ...jest.requireActual('jsonwebtoken'),  // Spread the actual methods and properties
-  verify: jest.fn().mockReturnValue({ id: 'newUser' }),  // New mock behavior
-  sign: jest.fn().mockReturnValue('newToken'),  // New mock behavior
-}));
+jest.mock('jsonwebtoken', () => {
+  const actual = jest.requireActual<typeof jwt>('jsonwebtoken');
+  
+  return {
+    ...actual,
+    verify: jest.fn().mockReturnValue({ id: 'newUser' } as jwt.JwtPayload),
+    sign: jest.fn().mockReturnValue('newToken' as string)
+  } satisfies typeof jwt;
+});
 
 
 jest.mock('jsonwebtoken', () => {
