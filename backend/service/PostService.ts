@@ -137,7 +137,7 @@ export class PostService {
         
 
         try{
-            const userPost = await PostModel.find({userId: userId})
+            const userPost = await PostModel.find({userId})
             if(userPostOnly){
                 return userPost
             }

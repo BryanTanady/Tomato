@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1742172187020" clover="3.2.0">
-  <project timestamp="1742172187020" name="All files">
-    <metrics statements="438" coveredstatements="438" conditionals="122" coveredconditionals="122" methods="72" coveredmethods="72" elements="632" coveredelements="632" complexity="0" loc="438" ncloc="438" packages="6" files="17" classes="17"/>
+<coverage generated="1742174054816" clover="3.2.0">
+  <project timestamp="1742174054817" name="All files">
+    <metrics statements="437" coveredstatements="437" conditionals="122" coveredconditionals="122" methods="72" coveredmethods="72" elements="631" coveredelements="631" complexity="0" loc="437" ncloc="437" packages="6" files="17" classes="17"/>
     <package name="controllers">
       <metrics statements="232" coveredstatements="232" conditionals="74" coveredconditionals="74" methods="43" coveredmethods="43"/>
       <file name="ChatController.ts" path="/home/btanady/cpen321/forked/Tomato/backend/controllers/ChatController.ts">
@@ -259,9 +259,9 @@
       </file>
     </package>
     <package name="middleware">
-      <metrics statements="19" coveredstatements="19" conditionals="7" coveredconditionals="7" methods="1" coveredmethods="1"/>
+      <metrics statements="18" coveredstatements="18" conditionals="7" coveredconditionals="7" methods="1" coveredmethods="1"/>
       <file name="verifyToken.ts" path="/home/btanady/cpen321/forked/Tomato/backend/middleware/verifyToken.ts">
-        <metrics statements="19" coveredstatements="19" conditionals="7" coveredconditionals="7" methods="1" coveredmethods="1"/>
+        <metrics statements="18" coveredstatements="18" conditionals="7" coveredconditionals="7" methods="1" coveredmethods="1"/>
         <line num="1" count="4" type="stmt"/>
         <line num="6" count="4" type="stmt"/>
         <line num="7" count="37" type="cond" truecount="4" falsecount="0"/>
@@ -272,15 +272,14 @@
         <line num="15" count="36" type="cond" truecount="2" falsecount="0"/>
         <line num="16" count="1" type="stmt"/>
         <line num="18" count="1" type="stmt"/>
-        <line num="22" count="35" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
         <line num="23" count="35" type="stmt"/>
-        <line num="24" count="34" type="stmt"/>
+        <line num="24" count="35" type="stmt"/>
         <line num="25" count="34" type="stmt"/>
-        <line num="27" count="1" type="stmt"/>
+        <line num="26" count="34" type="stmt"/>
         <line num="28" count="1" type="stmt"/>
         <line num="29" count="1" type="stmt"/>
-        <line num="35" count="4" type="stmt"/>
-        <line num="36" count="4" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
       </file>
     </package>
     <package name="model">

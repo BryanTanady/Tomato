@@ -6,7 +6,7 @@ import request from 'supertest';
 import { UserModel } from '../../model/UserModel';
 import { UserService } from '../../service/UserService';
 import { UserRoutes } from '../../routes/UserRoutes';
-import verifyToken from '../../middleware/verifyToken';
+import {verifyToken} from '../../middleware/verifyToken';
 import { validationResult } from 'express-validator';
 
 jest.mock('jsonwebtoken', () => ({

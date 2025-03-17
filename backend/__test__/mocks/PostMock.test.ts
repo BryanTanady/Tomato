@@ -10,8 +10,8 @@ import { PostRoutes } from '../../routes/PostRoutes';
 import { validationResult } from 'express-validator';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { timingSafeEqual } from 'crypto';
+import {verifyToken} from '../../middleware/verifyToken';
 
-const {verifyToken} = require('../../middleware/verifyToken')
 config();
 jest.mock('jsonwebtoken', () => ({
   ...jest.requireActual('jsonwebtoken'),

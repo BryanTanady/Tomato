@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { AuthenticatedRequest } from '../types/AuthenticatedRequest';
 
 
-const verifyToken = (req: Request, res: Response, next: NextFunction) => {
+export const verifyToken = (req: Request, res: Response, next: NextFunction): void => {
     const token = req.header("Authorization")?.replace("Bearer ", "");
     const JWT_SECRET = process.env.JWT_SECRET
 
@@ -15,7 +15,8 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
     if (!token) {
         console.log("token doesn't exist")
 
-        return res.status(401).json({ message: 'No token provided' });
+        res.status(401).json({ message: 'No token provided' });
+        return
     }
 
     else{
@@ -31,6 +32,3 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
 
     }
 };
-
-export default verifyToken;
-module.exports =  {verifyToken};

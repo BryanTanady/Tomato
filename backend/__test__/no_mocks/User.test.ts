@@ -76,7 +76,7 @@ describe('Testing getUser', () => {
       firebaseToken: "user12345"
     };
 
-    userService.createUser(newUser._id, newUser.username, newUser.firebaseToken)
+    await userService.createUser(newUser._id, newUser.username, newUser.firebaseToken)
     const response = await request(app)
         .get(`/user/4321`)
         .expect(200)

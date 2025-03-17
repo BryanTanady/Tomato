@@ -303,7 +303,6 @@ describe("Testing getChats", () => {
       member_2: "other"
     };
 
-    const main_user = "user123"
     await request(app)
       .post('/chats') 
       .send(newChat) 
@@ -314,7 +313,7 @@ describe("Testing getChats", () => {
       .send(newChat_2) 
       .expect(200);
 
-    const response = await request(app)
+    await request(app)
       .get('/chats-unauthorized') 
       .expect(401);
   });

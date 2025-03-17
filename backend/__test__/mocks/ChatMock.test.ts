@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import morgan from 'morgan';
 import request from 'supertest';
-import { ChatController } from '../../controllers/ChatController';
 import { ChatModel } from '../../model/ChatModel';
 import { MessageModel } from '../../model/MessageModel';
 import { config } from 'dotenv';
@@ -12,7 +11,8 @@ import { validationResult } from 'express-validator';
 import { ChatService } from '../../service/ChatService';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 
-const {verifyToken} = require('../../middleware/verifyToken')
+import { verifyToken } from '../../middleware/verifyToken'
+
 let mongoServer = new MongoMemoryServer();
 
 const app = express();

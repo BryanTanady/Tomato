@@ -10,8 +10,8 @@ import startWSS from './wss';
 import { RecommendationRoutes } from './routes/RecommendationRoutes';
 import { AuthenticatedRequest } from './types/AuthenticatedRequest';
 config();
+import {verifyToken} from "./middleware/verifyToken";
 
-const {verifyToken} = require('./middleware/verifyToken')
 const app = express();
 
 app.use(express.json({limit: '100mb'}));
