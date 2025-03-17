@@ -7,7 +7,7 @@ import { UserController } from '../../controllers/UserController';
 import { UserModel } from '../../model/UserModel';
 
 jest.mock('jsonwebtoken', (): {
-  verify: jest.Mock<(token: string, secret: string, callback?: (err: any, decoded?: string | { id: string }) => void) => string | { id: string } | void>;
+  verify: jest.Mock<(token: string, secret: string, callback?: (err: unknown, decoded?: string | { id: string }) => void) => string | { id: string }>;
   sign: jest.Mock<(payload: object | string, secret: string) => string>;
 } => {
   const actualJWT = jest.requireActual('jsonwebtoken');
@@ -22,9 +22,7 @@ jest.mock('jsonwebtoken', (): {
 });
 
 jest.mock("google-auth-library", (): {
-  OAuth2Client: jest.Mock<() => {
-    verifyIdToken: () => Promise<{ getPayload: () => { email: string } }>
-  }>
+  OAuth2Client: jest.Mock
 } => {
   return {
     OAuth2Client: jest.fn().mockImplementation((): {

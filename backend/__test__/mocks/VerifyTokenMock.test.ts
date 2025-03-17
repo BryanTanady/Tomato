@@ -8,12 +8,14 @@ import { PostModel } from '../../model/PostModel';
 import { config } from 'dotenv';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { timingSafeEqual } from 'crypto';
-import jwt from 'jsonwebtoken';
 import { verifyToken } from '../../middleware/verifyToken';
 
 // const {verifyToken} = require('../../middleware/verifyToken')
 config();
-jest.mock('jsonwebtoken', () => ({
+jest.mock('jsonwebtoken', (): {
+  verify: jest.Mock<(token: string) => {id: string}>;
+  sign: jest.Mock<() => string>;
+} => ({
   ...jest.requireActual('jsonwebtoken'),
   verify: jest.fn().mockImplementation((token: string): {id: string} =>
     {
@@ -30,8 +32,7 @@ jest.mock('jsonwebtoken', () => ({
   sign: jest.fn().mockReturnValue("token")
 
   }));
-
-
+ 
 
 let mongoServer = new MongoMemoryServer();
 
