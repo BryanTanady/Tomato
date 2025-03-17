@@ -6,20 +6,42 @@ import request from 'supertest';
 import { UserController } from '../../controllers/UserController';
 import { UserModel } from '../../model/UserModel';
 
-jest.mock('jsonwebtoken', () => ({
-...jest.requireActual('jsonwebtoken'), 
-verify: jest.fn().mockReturnValue({id: "user123"}), 
-sign: jest.fn().mockReturnValue("token")
-}));
-jest.mock("google-auth-library", () => {
+jest.mock('jsonwebtoken', (): {
+  verify: jest.Mock
+  sign: jest.Mock
+} => {
+  const actualJWT = jest.requireActual('jsonwebtoken');
   return {
-      OAuth2Client: jest.fn().mockImplementation(() => ({
-          verifyIdToken: jest.fn().mockResolvedValue({
-              getPayload: () => ({
-                email: "email"
-              })
-          })
-      }))
+    ...actualJWT, 
+    verify: jest.fn().mockImplementation((token: string, secret: string, callback?: Function) => {
+      if (callback) return callback(null, { id: "user123" });
+      return { id: "user123" }; // Simulate a valid decoded token
+    }),
+    sign: jest.fn().mockReturnValue("token")
+  };
+});
+
+jest.mock("google-auth-library", (): {
+  OAuth2Client: jest.Mock
+} => {
+  return {
+    OAuth2Client: jest.fn().mockImplementation(() => ({
+      verifyIdToken: jest.fn().mockResolvedValue({
+        getPayload: (): { email: string } => ({
+          email: "email"
+        })
+      })
+    }))
+  };
+} => {
+  return {
+    OAuth2Client: jest.fn().mockImplementation(() => ({
+      verifyIdToken: jest.fn().mockResolvedValue({
+        getPayload: (): { email: string } => ({
+          email: "email"
+        })
+      })
+    }))
   };
 });
 
@@ -30,9 +52,11 @@ app.use(express.json());
 app.use(morgan('tiny')); 
 
 const userController = new UserController();
-app.post('/user-faulty/auth', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+app.post('/user-faulty/auth', (req: Request, res: Response, next: NextFunction): void => {
     try {
-        await userController.handleGoogleSignIn(req, res);
+        userController.handleGoogleSignIn(req, res)
+        .then(() => { next(); })
+        .catch((err: unknown) => { next(err); });
     } catch (error) {
         next(error);
     }});  
@@ -40,7 +64,7 @@ app.post('/user-faulty/auth', async (req: Request, res: Response, next: NextFunc
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
   const uri = mongoServer.getUri();
-  await mongoose.connect(uri);
+  await mongoose.connect(uri as string);
 });
 
 afterAll(async () => {
