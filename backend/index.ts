@@ -21,18 +21,17 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Hello World');
 });
 
-const VALID_ROUTE_METHODS = ['get', 'post', 'put', 'delete', 'patch']
 
 const allRoutes = [...PostRoutes, ...UserRoutes, ...ChatRoutes, ...RecommendationRoutes]
 allRoutes.forEach((route) => {
     const middlewares = route.protected ? [verifyToken] : []; // Add verifyToken only if protected
-
-    const methodIndex = VALID_ROUTE_METHODS.indexOf(route.method)
-    if (methodIndex === -1) {
-        return;
+    const allowedMethods = ['get', 'post', 'put', 'delete', 'patch'];
+    // Ensure that route.method is one of the allowed methods
+    const method = route.method.toLowerCase();
+    if (!allowedMethods.includes(method)) {
+        throw new Error(`Unsupported HTTP method: ${method}`);
     }
-    const validatedMethod = VALID_ROUTE_METHODS[methodIndex] as keyof express.Application;
-    app[validatedMethod](
+    app[method as keyof express.Application](
         route.route,
         ...middlewares,
         route.validation,
