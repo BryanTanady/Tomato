@@ -12,20 +12,11 @@ import * as jwt from 'jsonwebtoken';
 import { mocked } from 'jest-mock';
 
 
-jest.mock('jsonwebtoken', () => {
-  const actual = jest.requireActual<typeof jwt>('jsonwebtoken');
-  
-  return mocked({
-    ...actual,
-    verify: jest.fn().mockReturnValue({ id: 'newUser' }),
-    sign: jest.fn().mockReturnValue('newToken')
-  }, { shallow: false }) as typeof jwt;
-});
-
-jest.mock('jsonwebtoken', () => {
-  const actualJwt = jest.requireActual<typeof jwt>('jsonwebtoken'); 
+jest.mock('jsonwebtoken', (): {
+  verify: jest.Mock<jwt.JwtPayload, [string, string]>;
+  sign: jest.Mock<string, [jwt.JwtPayload, string, jwt.SignOptions?]>;
+} => {
   return {
-    ...actualJwt,
     verify: jest.fn().mockReturnValue({ id: "user123" } as jwt.JwtPayload),
     sign: jest.fn().mockReturnValue("token" as string),
   };
