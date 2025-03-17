@@ -12,7 +12,6 @@ import { ChatService } from '../../service/ChatService';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 
 import { verifyToken } from '../../middleware/verifyToken'
-import { Route } from '../../routes/RouteInterface';
 
 let mongoServer = new MongoMemoryServer();
 

@@ -11,7 +11,6 @@ import { validationResult } from 'express-validator';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { timingSafeEqual } from 'crypto';
 import {verifyToken} from '../../middleware/verifyToken';
-import { Route } from '../../routes/RouteInterface';
 
 config();
 jest.mock('jsonwebtoken', () => ({

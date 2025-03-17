@@ -8,7 +8,6 @@ import { UserService } from '../../service/UserService';
 import { UserRoutes } from '../../routes/UserRoutes';
 import {verifyToken} from '../../middleware/verifyToken';
 import { validationResult } from 'express-validator';
-import { Route } from '../../routes/RouteInterface';
 
 jest.mock('jsonwebtoken', () => ({
 ...jest.requireActual('jsonwebtoken'),
