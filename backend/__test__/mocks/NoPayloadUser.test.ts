@@ -13,7 +13,7 @@ jest.mock('jsonwebtoken', (): {
   const actualJWT = jest.requireActual('jsonwebtoken');
   return {
     ...actualJWT, 
-    verify: jest.fn().mockImplementation((token: string, secret: string, callback?: Function) => {
+    verify: jest.fn().mockImplementation((token: string, secret: string, callback?: (err: unknown, decoded?: { id: string }) => void) => {
       if (callback) return callback(null, { id: "user123" });
       return { id: "user123" }; // Simulate a valid decoded token
     }),
