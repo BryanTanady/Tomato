@@ -26,8 +26,8 @@ export class RecommendationController {
         
         if(posts){
             for (const post of posts) {
-                let lat : number = post.latitude as number//? post.latitude : 0
-                let long : number = post.longitude as number//? post.longitude : 0
+                let lat : number = post.latitude
+                let long : number = post.longitude
                 const posts_at_location = await this.postService.getPostsAtLocation(lat, long, true) as Post[]
                 just_coords.push(lat.toString().concat(" ", long.toString()))
 
@@ -73,14 +73,14 @@ export class RecommendationController {
         let best_places = []
 
         while (potential_places.length > 0 && best_places.length <= max) {
-            let best_place : String = this.mode(potential_places)
+            let best_place : string = this.mode(potential_places)
             best_places.push(best_place)
             potential_places = this.deleteOccurences(potential_places, best_place) as string[]
         }
 
         let best_posts : Post[] = []
         for(let i = 0; i < max; i++) {
-            let place : String = best_places[i]
+            let place : string = best_places[i]
             if (!place) {
                 break;
             }
@@ -101,7 +101,7 @@ export class RecommendationController {
         ).pop();
     }
 
-    deleteOccurences(a : String[], e : String) : String[] | -1 {
+    deleteOccurences(a : string[], e : string) : string[] | -1 {
         if (!a.includes(e)) {
             return -1;
         }
