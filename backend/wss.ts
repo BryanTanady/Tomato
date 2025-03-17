@@ -104,7 +104,7 @@ const startWSS = () => {
                         });
         
                         // Send push notification if recipient offline
-                        if (!recipientFound && receiverTokens.length > 0) {
+                        if (!recipientFound) {
                             receiverTokens.forEach(token => {
                                 if(!message.message) return;
         

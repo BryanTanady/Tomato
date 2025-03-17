@@ -79,11 +79,7 @@ export class RecommendationController {
         }
 
         let best_posts : Post[] = []
-        for(let i = 0; i < max; i++) {
-            if (best_places.length <= i) {
-                break;
-            }
-            let place : string = best_places[i] as string
+        for (const place of best_places.slice(0, max)){        
             let lat : number = parseFloat(place.split(" ", 2)[0]) 
             let long : number = parseFloat(place.split(" ", 2)[1])
             let posts : Post[] = await this.postService.getPostsAtLocation(lat, long, false) as Post[]
