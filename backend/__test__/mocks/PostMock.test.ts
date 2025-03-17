@@ -37,28 +37,28 @@ app.use(morgan('tiny'));
 
 const postService = new PostService();
 PostRoutes.forEach((route) => {
-    const middlewares = (route ).protected ? [verifyToken] : []; // Add verifyToken only if protected
-    if (VALID_ROUTE_METHODS.indexOf(route.method) === -1) {
-        return;
-    }
-  const method = route.method as keyof express.Application;
-    app[method](
-        route.route,
-        ...middlewares,
-        route.validation,
-        async (req: AuthenticatedRequest, res: Response) => {
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) {
-                /* If there are validation errors, send a response with the error messages */
-                return res.status(400).send({ errors: errors.array() });
-            }
-            try {
-                await route.action(req, res);
-            } catch (err) {
-                console.error('An error occurred:', err);
-                return res.sendStatus(500); // Don't expose internal server workings
-            }
-        },
+  const middlewares = (route ).protected ? [verifyToken] : []; // Add verifyToken only if protected
+  const method = route.method.toLowerCase();
+  if (!VALID_ROUTE_METHODS.includes(method)) {
+      throw new Error(`Unsupported HTTP method: ${method}`);
+  }
+  app[method as keyof express.Application](
+      route.route,
+      ...middlewares,
+      route.validation,
+      async (req: AuthenticatedRequest, res: Response) => {
+          const errors = validationResult(req);
+          if (!errors.isEmpty()) {
+              /* If there are validation errors, send a response with the error messages */
+              return res.status(400).send({ errors: errors.array() });
+          }
+          try {
+              await route.action(req, res);
+          } catch (err) {
+              console.error('An error occurred:', err);
+              return res.sendStatus(500); // Don't expose internal server workings
+          }
+      },
     );
 });
 

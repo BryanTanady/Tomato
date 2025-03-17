@@ -27,11 +27,12 @@ const VALID_ROUTE_METHODS = ['get', 'post', 'put', 'delete', 'patch']
 
 RecommendationRoutes.forEach((route) => {
   const middlewares = (route ).protected ? [middleware] : []; // Add verifyToken only if protected
-  if (VALID_ROUTE_METHODS.indexOf(route.method) === -1) { return; }
-
-  const method = route.method as keyof express.Application;
-
-    app[method](
+  
+  const method = route.method.toLowerCase();
+  if (!VALID_ROUTE_METHODS.includes(method)) {
+      throw new Error(`Unsupported HTTP method: ${method}`);
+  }
+    app[method as keyof express.Application](
       route.route,
       ...middlewares,
       route.validation,
