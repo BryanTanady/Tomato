@@ -15,7 +15,7 @@ export class UserService {
         try {
             const newUser: IUser = new UserModel({ 
                 _id: userId, 
-                username: username, 
+                username, 
                 firebaseToken: [firebaseToken]
               });
             console.log("Created new user")

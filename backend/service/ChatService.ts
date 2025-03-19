@@ -35,7 +35,7 @@ export class ChatService {
    */
   async getChatMessages(chatroom_id: string): Promise<IMessage[] | null> {
     try {
-      return await MessageModel.find({ chatroom_id: chatroom_id }).exec();
+      return await MessageModel.find({ chatroom_id }).exec();
     } catch (err: unknown) {
       if (err instanceof Error) {
         console.error("Error getting chat messages: " + err.message);
@@ -83,7 +83,7 @@ export class ChatService {
    */
   async deleteChat(chatroom_id: string): Promise<IChat | null> {
     try {
-      await MessageModel.deleteMany({ chatroom_id: chatroom_id }).exec();
+      await MessageModel.deleteMany({ chatroom_id }).exec();
       const chat = await ChatModel.findById(chatroom_id).exec();
       if (chat) {
         await chat.deleteOne();

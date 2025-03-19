@@ -35,7 +35,7 @@
 
 #### 2.1.2. Commit Hash Where Tests Run
 
-`b6e173c425ba3be316cecce6f53c99b23a3ae174`
+`88b37f15cb88c7fc934fb6c80fb607555e8088a0`
 
 #### 2.1.3. Explanation on How to Run the Tests
 
@@ -689,11 +689,12 @@
 
 ### 5.1. Commit Hash Where Codacy Ran
 
-`[Insert Commit SHA here]`
+`88b37f15cb88c7fc934fb6c80fb607555e8088a0`
 
 ### 5.2. Unfixed Issues per Codacy Category
 
-![image](https://github.com/user-attachments/assets/4dd25cbc-8ad0-4286-ab22-669e3a84bc03)
+![image](https://github.com/user-attachments/assets/d9e24d16-d6e4-4a73-badf-caf170ef7535)
+
 
 ### 5.3. Unfixed Issues per Codacy Code Pattern
 

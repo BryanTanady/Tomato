@@ -90,7 +90,7 @@ Our app allows people to keep a history of all the places they have traveled to 
     - **Overview**:
         1. Create Posts
         2. Delete Posts
-        4. View Posts
+        3. View Posts
          
     
     - **Detailed Flow for Each Independent Scenario**: 
