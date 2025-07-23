@@ -151,10 +151,8 @@ class PostActivity : AppCompatActivity() {
                 .setTitle("Are you sure you want to delete this post?")
                 .setPositiveButton("Yes") { _, _ ->
                     lifecycleScope.launch {
-                        val response = HTTPRequest.sendDeleteRequest(
-                            "${BuildConfig.SERVER_ADDRESS}/posts/${intent.getStringExtra("postId")}",
-                            this@PostActivity
-                        )
+                        val response = HTTPRequest.sendDeleteRequest("${BuildConfig.SERVER_ADDRESS}/posts/${intent.getStringExtra("postId")}"
+                            , this@PostActivity)
                         if(response != null){
                             // Create an intent for MainActivity
                             val intent = Intent(this@PostActivity, MapsActivity::class.java).apply {
