@@ -39,23 +39,12 @@ object HTTPRequest {
                     response.body?.string()
                 }
             } catch (e: IOException) {
-<<<<<<< HEAD:frontEnd/app/src/main/java/com/example/tomato/helper/HTTPRequest.kt
-                Log.e("HTTPRequest", "IOException: $e")
-=======
->>>>>>> refs/remotes/origin/main:frontEnd/app/src/main/java/com/example/tomato/HTTPRequest.kt
                 e.printStackTrace()
                 null
             } catch (e: IllegalStateException) {
                 e.printStackTrace()
-<<<<<<< HEAD:frontEnd/app/src/main/java/com/example/tomato/helper/HTTPRequest.kt
-                Log.e("HTTPRequest", "IllegalStateException: $e")
                 null
             } catch (e: SecurityException) {
-                Log.e("HTTPRequest", "SecurityException: $e")
-=======
-                null
-            } catch (e: SecurityException) {
->>>>>>> refs/remotes/origin/main:frontEnd/app/src/main/java/com/example/tomato/HTTPRequest.kt
                 e.printStackTrace()
                 null
             }
