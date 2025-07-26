@@ -2,33 +2,51 @@ name: Test Tomato App
 
 on:
   push:
-    branches:
-      - dev
-      - main
+    branches: [dev, main]
   pull_request:
-    branches:
-      - dev
-      - main
+    branches: [dev, main]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout repo
       - uses: actions/checkout@v2
+
+      # Setup Node
       - uses: actions/setup-node@v3
         with:
           node-version: '20'
-      - run: |
-          cd backend
-          npm install
-      - run: |
-          cd backend
-          cat > .env << EOF
+
+      # Install dependencies
+      - name: Install dependencies
+        working-directory: backend
+        run: npm install
+
+      # Set up .env file for dotenv
+      - name: Set environment variables
+        working-directory: backend
+        run: |
+          cat > .env <<EOF
           PORT=${{ vars.PROD_PORT }}
           DB_URI=${{ vars.PROD_DB_URI }}
           WEB_CLIENT_ID=${{ secrets.WEB_CLIENT_ID }}
           JWT_SECRET=${{ secrets.JWT_SECRET }}
-          WSS_PORT=${{ vars.WSS_PORT }} 
+          WSS_PORT=${{ vars.WSS_PORT }}
           EOF
-          npm test
+
+      # Run tests with coverage
+      - name: Run tests with coverage
+        working-directory: backend
+        run: npx jest --coverage
+
+      # Upload coverage to Codecov
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}  # Only needed if repo is private
+          files: ./backend/coverage/lcov.info
+          flags: unittests
+          name: tomato-backend-report
+          fail_ci_if_error: true
