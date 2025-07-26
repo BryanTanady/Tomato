@@ -9,19 +9,13 @@ on:
     branches:
       - dev
       - main
-
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    env:
+      PORT: ${{ vars.PORT }}
+      DB_URI: ${{ secrets.DB_URI }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      WSS_PORT: ${{ vars.PORT }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-      - run: |
-          cd backend
-          npm install
-      - run: |
-          cd backend
-          npm test
+      - run: npm test
