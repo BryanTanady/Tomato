@@ -24,11 +24,4 @@ jobs:
           npm install
       - run: |
           cd backend
-          cat > .env << EOF
-          PORT= ${{ vars.PROD_PORT }}
-          DB_URI= ${{ vars.PROD_DB_URI }}
-          WEB_CLIENT_ID= ${{ secrets.WEB_CLIENT_ID }}
-          JWT_SECRET= ${{ secrets.JWT_SECRET }}
-          WSS_PORT= ${{ vars.WSS_PORT || 3001 }} 
-          EOF
           npm test
