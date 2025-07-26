@@ -18,4 +18,4 @@ jobs:
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       WSS_PORT: ${{ vars.PORT }}
     steps:
-      - run: npm test
+    - run: cd backend && npm test
