@@ -3,6 +3,7 @@
 > **TOMATo** (**T**ravellers **o**n **M**aking **A**dventures **To**gether) is a social travel journal: drop photo-backed pins on a map, keep a personal log of everywhere you’ve been, and get location recommendations from people who travel like you. Chat with them for on-the-ground tips.
 
 ---
+[![codecov](https://codecov.io/gh/BryanTanady/Tomato/branch/main/graph/badge.svg)](https://codecov.io/gh/BryanTanady/Tomato)
 
 ## ✨ Core Features
 

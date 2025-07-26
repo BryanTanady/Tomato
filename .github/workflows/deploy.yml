@@ -1,59 +1,59 @@
-name: Deploy to EC2
+# name: Deploy to EC2
 
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - '.github/workflows/deploy.yml'
-      - 'backend/**'
+# on:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - '.github/workflows/deploy.yml'
+#       - 'backend/**'
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Test
-        run: echo ${{ vars.EC2_USER }}
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Test
+#         run: echo ${{ vars.EC2_USER }}
 
-      - name: Checkout
-        uses: actions/checkout@v3
+#       - name: Checkout
+#         uses: actions/checkout@v3
       
-      - name: Copy files to EC2
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ vars.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
-          source: "./backend/"
-          target: "/home/ubuntu/tomato/"
+#       - name: Copy files to EC2
+#         uses: appleboy/scp-action@master
+#         with:
+#           host: ${{ secrets.EC2_HOST }}
+#           username: ${{ vars.EC2_USER }}
+#           key: ${{ secrets.EC2_KEY }}
+#           source: "./backend/"
+#           target: "/home/ubuntu/tomato/"
       
-      - name: Rebuild and Deploy
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ vars.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
-          script: |
-            cd /home/ubuntu/tomato/backend
-            sudo rm -rf node_modules
-            npm install
-            cp /home/ubuntu/serviceAccountKey.json /home/ubuntu/tomato/backend/serviceAccountKey.json
-            # Write secrets into .env
-            cat > .env << EOF
-            PORT= ${{ vars.PROD_PORT }}
-            DB_URI= ${{ vars.PROD_DB_URI }}
-            WEB_CLIENT_ID= ${{ secrets.WEB_CLIENT_ID }}
-            JWT_SECRET= ${{ secrets.JWT_SECRET }}
-            WSS_PORT= ${{ vars.WSS_PORT || 3001 }} 
-            EOF
+#       - name: Rebuild and Deploy
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.EC2_HOST }}
+#           username: ${{ vars.EC2_USER }}
+#           key: ${{ secrets.EC2_KEY }}
+#           script: |
+#             cd /home/ubuntu/tomato/backend
+#             sudo rm -rf node_modules
+#             npm install
+#             cp /home/ubuntu/serviceAccountKey.json /home/ubuntu/tomato/backend/serviceAccountKey.json
+#             # Write secrets into .env
+#             cat > .env << EOF
+#             PORT= ${{ vars.PROD_PORT }}
+#             DB_URI= ${{ vars.PROD_DB_URI }}
+#             WEB_CLIENT_ID= ${{ secrets.WEB_CLIENT_ID }}
+#             JWT_SECRET= ${{ secrets.JWT_SECRET }}
+#             WSS_PORT= ${{ vars.WSS_PORT || 3001 }} 
+#             EOF
 
-            # JWT_SECRET= $( node -e "console.log(require('crypto').randomBytes(64).toString('hex'))" )
+#             # JWT_SECRET= $( node -e "console.log(require('crypto').randomBytes(64).toString('hex'))" )
 
-            # Give .env permissions
-            chmod 600 .env
+#             # Give .env permissions
+#             chmod 600 .env
 
-            # Build and run container
-            docker stop $(docker ps -a -q)
-            docker-compose down
-            docker-compose --env-file .env build
-            docker-compose --env-file .env up -d
+#             # Build and run container
+#             docker stop $(docker ps -a -q)
+#             docker-compose down
+#             docker-compose --env-file .env build
+#             docker-compose --env-file .env up -d
