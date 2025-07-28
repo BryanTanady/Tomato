@@ -66,7 +66,7 @@
 * **Notification**: Firebase Cloud Messaging (FCM)
 * **Database**: MongoDB
 * **Testing**:  
-  * **Backend**: Jest (with ts‑jest for TypeScript)  
+  * **Backend**: Jest (TypeScript)  
   * **Frontend**: Espresso (Android UI tests) 
 
 
