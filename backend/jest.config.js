@@ -14,6 +14,12 @@ module.exports = {
       'service/*.ts',
       'routes/*.ts'
     ],
+
+    // explicitly turn on coverage collection (override any defaults)
+    collectCoverage: true,
+    coverageReporters: ['json', 'text', 'lcov', 'text-summary'],
+    coverageDirectory: '<rootDir>/coverage',
+    
     setupFiles: ['<rootDir>/jest.setup.js']
   };
   
