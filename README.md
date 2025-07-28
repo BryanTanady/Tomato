@@ -65,6 +65,10 @@
 * **Auth**: GGoogle Sign-In on client → JWT issued/verified by backend
 * **Notification**: Firebase Cloud Messaging (FCM)
 * **Database**: MongoDB
+* **Testing**:  
+  * **Backend**: Jest (with ts‑jest for TypeScript)  
+  * **Frontend**: Espresso (Android UI tests) 
+
 
 ---
 
