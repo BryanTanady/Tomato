@@ -15,7 +15,7 @@
 * See **your private pins** alongside **the community’s public pins** (clearly labeled/toggleable).
 * Smart clustering keeps the view clean; dense areas collapse into tappable clusters so nothing gets buried.
 <p align="center">
-    <img src="assets/clustering.gif" height="400" alt="Demo">
+    <img src="assets/clustering.gif" height="500" alt="Demo">
 </p>
 
 ### 🔎 Search Locations
@@ -23,7 +23,7 @@
 * Global search bar to jump the camera anywhere on Earth.
 * **Autocomplete** suggests places as you type for instant navigation.
 <p align="center">
-    <img src="assets/search.gif" height="400" alt="Demo">
+    <img src="assets/search.gif" height="500" alt="Demo">
 </p>
 
 ### 📝 Post Management
@@ -33,7 +33,7 @@
 * View full post details from any pin.
 
 <p align="center">
-    <img src="assets/upload_post.gif" height="400" alt="Demo">
+    <img src="assets/upload_post.gif" height="500" alt="Demo">
 </p>
 
 
@@ -44,7 +44,7 @@
 * Push notifications (FCM) for new messages.
 
 <p align="center">
-    <img src="assets/chat.gif" height="400" alt="Demo">
+    <img src="assets/chat.gif" height="500" alt="Demo">
 </p>
 
 ### 🧠 Recommendations
@@ -53,7 +53,7 @@
 * Displayed in a dedicated **Profile → Recommendations** section for clean separation from map filters.
 
 <p align="center">
-    <img src="assets/profile.gif" height="400" alt="Demo">
+    <img src="assets/profile.gif" height="500" alt="Demo">
 </p>
 
 ---
@@ -75,7 +75,7 @@
 ## 🧩 Architecture Overview
 
 <p align="center">
-    <img src="documentation/images/components_dependencies.png" height="400" alt="architecture">
+    <img src="documentation/images/components_dependencies.png" height="500" alt="architecture">
 </p>
 
 
