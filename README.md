@@ -9,7 +9,7 @@
 
 ## ✨ Core Features
 
-### 📍 Interactive Map (Portfolio Pitch)
+### 📍 Interactive Map
 
 * Map‑first experience: browse a world of photo pins at a glance.
 * See **your private pins** alongside **the community’s public pins** (clearly labeled/toggleable).
